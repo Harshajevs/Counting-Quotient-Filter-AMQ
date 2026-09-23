@@ -1,0 +1,20 @@
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Compiled binaries
+cqf/bench_cqf
+cuckoo/bench_cuckoo
+bloom/bench_bloom
+
+# Object files
+*.o
+
+# Generated benchmark datasets
+results/data/
