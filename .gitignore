@@ -1,13 +1,18 @@
-# build artifacts
+# Build artifacts
 cqf/bench_cqf
 cuckoo/bench_cuckoo
 bloom/bench_bloom
 *.o
 
-# generated data & results (regenerate via scripts/run_all.sh)
+# Generated benchmark datasets
 results/data/
-results/*.csv
-results/*.png
 
-# keep the results/ directory itself in git
-!results/.gitkeep
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
