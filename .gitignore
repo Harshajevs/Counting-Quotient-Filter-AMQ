@@ -1,0 +1,13 @@
+# build artifacts
+cqf/bench_cqf
+cuckoo/bench_cuckoo
+bloom/bench_bloom
+*.o
+
+# generated data & results (regenerate via scripts/run_all.sh)
+results/data/
+results/*.csv
+results/*.png
+
+# keep the results/ directory itself in git
+!results/.gitkeep
