@@ -22,15 +22,19 @@
 #include <string.h>
 #include <inttypes.h>
 #include <math.h>
-#include <sys/time.h>
+#include <time.h>
+#include <errno.h>
 
 #include "include/gqf.h"
 #include "include/gqf_int.h"
 
 static double now_sec(void) {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec + tv.tv_usec / 1e6;
+    struct timespec ts;
+    if (clock_gettime(CLOCK_MONOTONIC_RAW, &ts) != 0) {
+        perror("clock_gettime");
+        exit(EXIT_FAILURE);
+    }
+    return (double)ts.tv_sec + (double)ts.tv_nsec / 1e9;
 }
 
 /* Reads whitespace/newline separated uint64 decimal values from `path`.
@@ -137,14 +141,41 @@ int main(int argc, char **argv) {
     double measured_fp = (double)false_positives / (double)n_neg;
     double theoretical_fp = pow(2.0, -(double)rbits);
 
-    /* ---- delete ---- */
+    /* ---- delete / decrement one occurrence per input item ---- */
+    /*
+     * qf_delete_key_value() removes the entire counter for a key in one call.
+     * Using it once per Zipfian input would therefore turn most later calls
+     * into no-ops after the first occurrence and would wildly overstate delete
+     * throughput.  The benchmark measures one DELETE operation per inserted
+     * occurrence instead, so repeated keys exercise the CQF counter path.
+     */
     t0 = now_sec();
     uint64_t deleted_ok = 0;
     for (uint64_t i = 0; i < n_inserted; i++) {
-        int ret = qf_delete_key_value(&qf, pos_keys[i], 0, QF_NO_LOCK);
+        int ret = qf_remove(&qf, pos_keys[i], 0, 1, QF_NO_LOCK);
         if (ret >= 0) deleted_ok++;
     }
     double delete_time = now_sec() - t0;
+
+    /* After removing one occurrence for every insertion, every represented
+     * key should have count zero.  This is a cheap functional check and is
+     * deliberately outside the timed delete section. */
+    uint64_t remaining_after_delete = 0;
+    for (uint64_t i = 0; i < n_inserted; i++) {
+        if (qf_count_key_value(&qf, pos_keys[i], 0, 0) != 0) {
+            remaining_after_delete++;
+            break;
+        }
+    }
+    if (remaining_after_delete != 0 || deleted_ok != n_inserted) {
+        fprintf(stderr, "[cqf] deletion validation FAILED: deleted_ok=%" PRIu64
+                        " expected=%" PRIu64 " remaining=%" PRIu64 "\n",
+                deleted_ok, n_inserted, remaining_after_delete);
+        qf_free(&qf);
+        free(pos_keys);
+        free(neg_keys);
+        return EXIT_FAILURE;
+    }
 
     uint64_t mem_bytes = qf_get_total_size_in_bytes(&qf);
 

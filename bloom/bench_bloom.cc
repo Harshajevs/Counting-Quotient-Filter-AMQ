@@ -1,16 +1,10 @@
 /*
- * bench_bloom.cc — unified benchmark driver for the reference Bloom filter
- * (bloom_filter.hpp, a minimal 4-hash-function bit-array implementation).
+ * bench_bloom.cc — unified benchmark driver for the Bloom filter.
  *
- * Same CSV schema as bench_cqf.c and bench_cuckoo.cc, so all three filters
- * land in one comparison table (see ../scripts/plot_results.py).
- *
- * NOTE: bloom_filter.hpp has no Delete() — Bloom filters fundamentally
- * can't support deletion without extra structure (e.g. counters), which is
- * exactly one of the gaps the CQF paper points out. The delete columns in
- * this driver's CSV row are filled with 0 to make that limitation explicit
- * and keep the schema aligned across all three filters, rather than
- * silently omitting the columns.
+ * The driver uses raw uint64_t keys so timed sections contain only the filter
+ * operation itself.  This is important for a fair comparison with the C/C++
+ * CQF and cuckoo implementations and is closer to the paper's benchmark,
+ * which feeds pre-generated 64-bit values to the filters.
  *
  * Usage:
  *   bench_bloom <positive_file> <negative_file> <size_bits> <num_hashes> \
@@ -19,6 +13,7 @@
 
 #include <chrono>
 #include <cmath>
+#include <cinttypes>
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
@@ -27,122 +22,135 @@
 
 #include "bloom_filter.hpp"
 
-using Clock = std::chrono::high_resolution_clock;
+using Clock = std::chrono::steady_clock;
 
 static double elapsed_sec(Clock::time_point t0, Clock::time_point t1) {
     return std::chrono::duration<double>(t1 - t0).count();
 }
 
-static std::vector<uint64_t> read_keys(const std::string &path) {
+static std::vector<std::uint64_t> read_keys(const std::string &path) {
     std::ifstream in(path);
     if (!in) {
-        fprintf(stderr, "Could not open %s\n", path.c_str());
-        exit(1);
+        std::fprintf(stderr, "[bloom] could not open %s\n", path.c_str());
+        std::exit(EXIT_FAILURE);
     }
-    std::vector<uint64_t> out;
-    out.reserve(1 << 16);
-    std::string line;
-    while (std::getline(in, line)) {
-        if (line.empty()) continue;
-        out.push_back(strtoull(line.c_str(), nullptr, 10));
-    }
+
+    std::vector<std::uint64_t> out;
+    out.reserve(1U << 20);
+    std::uint64_t value;
+    while (in >> value) out.push_back(value);
     return out;
 }
 
 static void write_csv_header_if_needed(const std::string &path) {
     std::ifstream test(path);
     if (test.good()) return;
-    std::ofstream f(path);
-    f << "filter,distribution,n_requested,n_inserted,config_param,"
-         "memory_bytes,insert_time_s,insert_ops_sec,"
-         "query_pos_time_s,query_pos_ops_sec,found_positive,"
-         "query_neg_time_s,query_neg_ops_sec,measured_fp_rate,"
-         "theoretical_fp_rate,fp_ratio,delete_time_s,delete_ops_sec,deleted_ok\n";
+
+    std::ofstream out(path);
+    if (!out) {
+        std::fprintf(stderr, "[bloom] could not create %s\n", path.c_str());
+        std::exit(EXIT_FAILURE);
+    }
+    out << "filter,distribution,n_requested,n_inserted,config_param,"
+           "memory_bytes,insert_time_s,insert_ops_sec,"
+           "query_pos_time_s,query_pos_ops_sec,found_positive,"
+           "query_neg_time_s,query_neg_ops_sec,measured_fp_rate,"
+           "theoretical_fp_rate,fp_ratio,delete_time_s,delete_ops_sec,deleted_ok\n";
 }
 
 int main(int argc, char **argv) {
     if (argc < 7) {
-        fprintf(stderr,
+        std::fprintf(stderr,
             "Usage: %s <positive_file> <negative_file> <size_bits> <num_hashes> "
             "<distribution_label> <output_csv>\n", argv[0]);
-        return 1;
+        return EXIT_FAILURE;
     }
-    std::string pos_file = argv[1];
-    std::string neg_file = argv[2];
-    size_t size_bits = strtoull(argv[3], nullptr, 10);
-    size_t num_hashes = strtoull(argv[4], nullptr, 10);
-    std::string dist_label = argv[5];
-    std::string out_csv = argv[6];
 
-    /* this implementation uses exactly 4 hash functions regardless of
-     * num_hashes (see bloom_filter.hpp) — we still accept and record the
-     * parameter for transparency in the CSV / future extension */
-    (void)num_hashes;
+    const std::string pos_file = argv[1];
+    const std::string neg_file = argv[2];
+    const std::size_t size_bits = static_cast<std::size_t>(std::strtoull(argv[3], nullptr, 10));
+    const std::size_t num_hashes = static_cast<std::size_t>(std::strtoull(argv[4], nullptr, 10));
+    const std::string dist_label = argv[5];
+    const std::string out_csv = argv[6];
 
-    auto pos = read_keys(pos_file);
-    auto neg = read_keys(neg_file);
-    fprintf(stderr, "[bloom] loaded %zu positive, %zu negative keys (size_bits=%zu)\n",
-            pos.size(), neg.size(), size_bits);
+    if (size_bits == 0 || num_hashes == 0) {
+        std::fprintf(stderr, "[bloom] size_bits and num_hashes must be positive\n");
+        return EXIT_FAILURE;
+    }
 
-    BloomFilter filter(size_bits, 4);
+    const auto pos = read_keys(pos_file);
+    const auto neg = read_keys(neg_file);
+    std::fprintf(stderr,
+                 "[bloom] loaded %zu positive, %zu negative keys (size_bits=%zu k=%zu)\n",
+                 pos.size(), neg.size(), size_bits, num_hashes);
 
-    /* ---- insert ---- */
+    BloomFilter filter(size_bits, num_hashes);
+    const std::size_t n_inserted = pos.size();
+
+    // ---- insert ----
     auto t0 = Clock::now();
-    for (size_t i = 0; i < pos.size(); i++) {
-        filter.insert(std::to_string(pos[i]));
-    }
-    double insert_time = elapsed_sec(t0, Clock::now());
-    size_t n_inserted = pos.size(); /* Bloom filters never "reject" an insert */
+    for (std::uint64_t key : pos) filter.insert(key);
+    const double insert_time = elapsed_sec(t0, Clock::now());
 
-    /* ---- positive lookups ---- */
+    // ---- positive lookups ----
     t0 = Clock::now();
-    size_t found_pos = 0;
-    for (size_t i = 0; i < pos.size(); i++) {
-        if (filter.contains(std::to_string(pos[i]))) found_pos++;
+    std::size_t found_pos = 0;
+    for (std::uint64_t key : pos) {
+        if (filter.contains(key)) ++found_pos;
     }
-    double query_pos_time = elapsed_sec(t0, Clock::now());
+    const double query_pos_time = elapsed_sec(t0, Clock::now());
 
-    /* ---- negative lookups (false-positive measurement) ---- */
+    // ---- negative lookups / measured false positives ----
     t0 = Clock::now();
-    size_t false_positives = 0;
-    for (size_t i = 0; i < neg.size(); i++) {
-        if (filter.contains(std::to_string(neg[i]))) false_positives++;
+    std::size_t false_positives = 0;
+    for (std::uint64_t key : neg) {
+        if (filter.contains(key)) ++false_positives;
     }
-    double query_neg_time = elapsed_sec(t0, Clock::now());
+    const double query_neg_time = elapsed_sec(t0, Clock::now());
 
-    double measured_fp = neg.empty() ? 0.0 : (double)false_positives / (double)neg.size();
+    const double measured_fp = neg.empty()
+        ? 0.0
+        : static_cast<double>(false_positives) / static_cast<double>(neg.size());
 
-    /* Standard Bloom filter theoretical FP formula: (1 - e^(-k*n/m))^k
-     * k = num hash functions (fixed at 4 in this implementation)
-     * n = number of inserted items, m = filter size in bits */
-    double k = 4.0;
-    double m = (double)size_bits;
-    double n = (double)n_inserted;
-    double theoretical_fp = pow(1.0 - exp(-k * n / m), k);
+    // Standard Bloom-filter FPR approximation for n inserted operations and m bits.
+    // For the Zipfian workload this is intentionally conservative because many
+    // insertions are duplicates; duplicates do not set additional bits.
+    const double k = static_cast<double>(num_hashes);
+    const double m = static_cast<double>(size_bits);
+    const double n = static_cast<double>(n_inserted);
+    const double theoretical_fp = std::pow(1.0 - std::exp(-k * n / m), k);
 
-    size_t mem_bytes = size_bits / 8;
-
-    char config_param[64];
-    snprintf(config_param, sizeof(config_param), "size_bits=%zu;k=4", size_bits);
+    char config_param[96];
+    std::snprintf(config_param, sizeof(config_param),
+                  "size_bits=%zu;k=%zu", size_bits, num_hashes);
 
     write_csv_header_if_needed(out_csv);
-    FILE *csv = fopen(out_csv.c_str(), "a");
-    fprintf(csv,
-        "bloom,%s,%zu,%zu,%s,%zu,"
-        "%.6f,%.2f,"
-        "%.6f,%.2f,%zu,"
-        "%.6f,%.2f,%.8f,%.8f,%.4f,"
-        "%.6f,%.2f,%zu\n",
-        dist_label.c_str(), pos.size(), n_inserted, config_param, mem_bytes,
-        insert_time, n_inserted / (insert_time > 0 ? insert_time : 1e-9),
-        query_pos_time, n_inserted / (query_pos_time > 0 ? query_pos_time : 1e-9), found_pos,
-        query_neg_time, neg.size() / (query_neg_time > 0 ? query_neg_time : 1e-9),
-        measured_fp, theoretical_fp, (theoretical_fp > 0 ? measured_fp / theoretical_fp : 0.0),
-        /* delete not supported by this Bloom filter -- see file header comment */
-        0.0, 0.0, (size_t)0);
-    fclose(csv);
+    FILE *csv = std::fopen(out_csv.c_str(), "a");
+    if (!csv) {
+        std::fprintf(stderr, "[bloom] could not open %s for append\n", out_csv.c_str());
+        return EXIT_FAILURE;
+    }
 
-    fprintf(stderr, "[bloom] done: inserted=%zu found_pos=%zu measured_fp=%.6f theoretical_fp=%.6f (delete not supported)\n",
-            n_inserted, found_pos, measured_fp, theoretical_fp);
-    return 0;
+    const double insert_ops = n_inserted / (insert_time > 0.0 ? insert_time : 1e-12);
+    const double pos_ops = n_inserted / (query_pos_time > 0.0 ? query_pos_time : 1e-12);
+    const double neg_ops = neg.size() / (query_neg_time > 0.0 ? query_neg_time : 1e-12);
+    const double fp_ratio = theoretical_fp > 0.0 ? measured_fp / theoretical_fp : 0.0;
+
+    std::fprintf(csv,
+        "bloom,%s,%zu,%zu,%s,%zu,"
+        "%.9f,%.2f,"
+        "%.9f,%.2f,%zu,"
+        "%.9f,%.2f,%.8f,%.8f,%.4f,"
+        "0.000000000,0.00,0\n",
+        dist_label.c_str(), pos.size(), n_inserted, config_param, filter.size_in_bytes(),
+        insert_time, insert_ops,
+        query_pos_time, pos_ops, found_pos,
+        query_neg_time, neg_ops, measured_fp, theoretical_fp, fp_ratio);
+    std::fclose(csv);
+
+    std::fprintf(stderr,
+                 "[bloom] done: inserted=%zu found_pos=%zu false_positives=%zu "
+                 "measured_fp=%.6f theoretical_fp=%.6f\n",
+                 n_inserted, found_pos, false_positives, measured_fp, theoretical_fp);
+    return EXIT_SUCCESS;
 }

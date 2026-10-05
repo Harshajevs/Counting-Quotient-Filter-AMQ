@@ -19,8 +19,6 @@
 
 #include "partitioned_counter.h"
 
-#define min(a,b) ((a) < (b) ? (a) : (b))
-
 int pc_init(pc_t *pc, int64_t *global_counter, uint32_t num_counters,
 						int32_t threshold) {
 	int num_cpus = (int)sysconf( _SC_NPROCESSORS_ONLN );
@@ -28,8 +26,8 @@ int pc_init(pc_t *pc, int64_t *global_counter, uint32_t num_counters,
 		perror( "sysconf" );
 		return PC_ERROR;
 	}
-	pc->num_counters = num_counters == 0 ? num_cpus : min(num_cpus,
-																												num_counters);
+	pc->num_counters = num_counters == 0 ? (uint32_t)num_cpus :
+			(uint32_t)(num_cpus < (int)num_counters ? num_cpus : (int)num_counters);
 	
 	pc->local_counters = (lctr_t *)calloc(pc->num_counters,
 																				 sizeof(*pc->local_counters));

@@ -129,8 +129,12 @@ def fp_ratio_chart(rows, fname):
 
 
 def capacity_chart(rows, fname):
-    """n_inserted vs n_requested -- visually shows a filter failing to
-    accept all requested inserts (e.g. cuckoo filter on Zipfian data)."""
+    """Compare requested and accepted insert operations.
+
+    This makes a capacity/failure event visible without implying that every
+    accepted operation corresponds to a distinct key (Zipfian inputs contain
+    duplicates).
+    """
     fig, axes = plt.subplots(1, len(DIST_ORDER), figsize=(10, 4.5), sharey=True)
     if len(DIST_ORDER) == 1:
         axes = [axes]
@@ -161,7 +165,7 @@ def capacity_chart(rows, fname):
                             ha="center", fontsize=8, color="#C44E52",
                             arrowprops=dict(arrowstyle="->", color="#C44E52"))
 
-    fig.suptitle("Requested vs. actually inserted keys (filter capacity/failure)")
+    fig.suptitle("Requested vs. accepted insert operations (capacity/failure)")
     fig.tight_layout()
     out_path = os.path.join(OUT_DIR, fname)
     fig.savefig(out_path, dpi=150)

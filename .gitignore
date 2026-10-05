@@ -1,18 +1,28 @@
+# ==============================
 # Build artifacts
+# ==============================
 cqf/bench_cqf
 cuckoo/bench_cuckoo
 bloom/bench_bloom
 *.o
 
-# Generated benchmark datasets
-results/data/
-
+# ==============================
 # Python virtual environment
+# ==============================
 .venv/
 
+# ==============================
 # Python cache
+# ==============================
 __pycache__/
 *.pyc
 
+# ==============================
 # macOS
+# ==============================
 .DS_Store
+
+# ==============================
+# Generated benchmark datasets
+# ==============================
+results/data/

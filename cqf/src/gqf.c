@@ -22,6 +22,9 @@
 #include "hashutil.h"
 #include "gqf.h"
 #include "gqf_int.h"
+#if defined(__x86_64__) || defined(__i386__)
+#include <immintrin.h>
+#endif
 
 /******************************************************************
  * Code for managing the metadata bits and slots w/o interpreting *
@@ -264,11 +267,7 @@ static void modify_metadata(pc_t *metadata, int cnt)
 
 static inline int popcnt(uint64_t val)
 {
-	asm("popcnt %[val], %[val]"
-			: [val] "+r" (val)
-			:
-			: "cc");
-	return val;
+	return __builtin_popcountll(val);
 }
 
 static inline int64_t bitscanreverse(uint64_t val)
@@ -425,17 +424,37 @@ static inline uint64_t _select64(uint64_t x, int k)
 
 // Returns the position of the rank'th 1.  (rank = 0 returns the 1st 1)
 // Returns 64 if there are fewer than rank+1 1s.
-static inline uint64_t bitselect(uint64_t val, int rank) {
-#ifdef __SSE4_2_
-	uint64_t i = 1ULL << rank;
-	asm("pdep %[val], %[mask], %[val]"
-			: [val] "+r" (val)
-			: [mask] "r" (i));
-	asm("tzcnt %[bit], %[index]"
-			: [index] "=r" (i)
-			: [bit] "g" (val)
-			: "cc");
-	return i;
+//
+// The paper uses PDEP + TZCNT on Haswell-class x86 CPUs.  The original source
+// selected those instructions using the __SSE4_2__ preprocessor symbol even
+// though PDEP/TZCNT are BMI instructions.  That was both misleading and a
+// portability hazard.  We use runtime CPU detection and keep the broadword
+// implementation as a safe fallback.
+#if defined(__x86_64__) || defined(__i386__)
+static int g_has_bmi2 = 0;
+
+__attribute__((constructor)) static void init_rank_select_cpu(void)
+{
+	#if defined(__GNUC__) || defined(__clang__)
+	g_has_bmi2 = __builtin_cpu_supports("bmi2") && __builtin_cpu_supports("bmi");
+	#endif
+}
+
+__attribute__((target("bmi,bmi2")))
+static inline uint64_t bitselect_bmi2(uint64_t val, int rank)
+{
+	if (rank < 0 || rank >= 64 || rank >= __builtin_popcountll(val))
+		return 64;
+	uint64_t one = 1ULL << rank;
+	uint64_t deposited = _pdep_u64(one, val);
+	return deposited ? (uint64_t)__builtin_ctzll(deposited) : 64;
+}
+#endif
+
+static inline uint64_t bitselect(uint64_t val, int rank)
+{
+#if defined(__x86_64__) || defined(__i386__)
+	if (g_has_bmi2) return bitselect_bmi2(val, rank);
 #endif
 	return _select64(val, rank);
 }
@@ -1708,7 +1727,7 @@ uint64_t qf_use(QF* qf, void* buffer, uint64_t buffer_len)
 	}
 	qf->blocks = (qfblock *)(qf->metadata + 1);
 
-	qf->runtimedata = (qfruntime *)calloc(sizeof(qfruntime), 1);
+	qf->runtimedata = (qfruntime *)calloc(1, sizeof(qfruntime));
 	if (qf->runtimedata == NULL) {
 		perror("Couldn't allocate memory for runtime data.");
 		exit(EXIT_FAILURE);
@@ -1760,7 +1779,7 @@ bool qf_malloc(QF *qf, uint64_t nslots, uint64_t key_bits, uint64_t
 		exit(EXIT_FAILURE);
 	}
 
-	qf->runtimedata = (qfruntime *)calloc(sizeof(qfruntime), 1);
+	qf->runtimedata = (qfruntime *)calloc(1, sizeof(qfruntime));
 	if (qf->runtimedata == NULL) {
 		perror("Couldn't allocate memory for runtime data.");
 		exit(EXIT_FAILURE);
@@ -1851,7 +1870,7 @@ int64_t qf_resize_malloc(QF *qf, uint64_t nslots)
 uint64_t qf_resize(QF* qf, uint64_t nslots, void* buffer, uint64_t buffer_len)
 {
 	QF new_qf;
-	new_qf.runtimedata = (qfruntime *)calloc(sizeof(qfruntime), 1);
+	new_qf.runtimedata = (qfruntime *)calloc(1, sizeof(qfruntime));
 	if (new_qf.runtimedata == NULL) {
 		perror("Couldn't allocate memory for runtime data.\n");
 		exit(EXIT_FAILURE);

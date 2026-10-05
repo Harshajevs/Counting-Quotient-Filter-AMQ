@@ -39,7 +39,15 @@ def main():
         key = tuple(r[c] for c in KEY_COLS)
         groups[key].append(r)
 
-    fieldnames = KEY_COLS + STABLE_COLS + NUMERIC_AVG_COLS
+    # Keep the public CSV column order identical to the benchmark drivers.
+    fieldnames = [
+        "filter", "distribution", "n_requested", "n_inserted", "config_param",
+        "memory_bytes", "insert_time_s", "insert_ops_sec",
+        "query_pos_time_s", "query_pos_ops_sec", "found_positive",
+        "query_neg_time_s", "query_neg_ops_sec", "measured_fp_rate",
+        "theoretical_fp_rate", "fp_ratio", "delete_time_s", "delete_ops_sec",
+        "deleted_ok",
+    ]
     with open(out_path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fieldnames)
         w.writeheader()
@@ -55,7 +63,19 @@ def main():
 
             for c in NUMERIC_AVG_COLS:
                 vals = [float(r[c]) for r in group_rows]
-                out[c] = sum(vals) / len(vals)
+                value = sum(vals) / len(vals)
+                # Keep the same human-readable precision as the individual
+                # benchmark drivers while retaining enough detail for analysis.
+                if c.endswith("_time_s"):
+                    out[c] = f"{value:.9f}"
+                elif c.endswith("_ops_sec"):
+                    out[c] = f"{value:.2f}"
+                elif c in ("measured_fp_rate", "theoretical_fp_rate"):
+                    out[c] = f"{value:.8f}"
+                elif c == "fp_ratio":
+                    out[c] = f"{value:.4f}"
+                else:
+                    out[c] = f"{value:.6f}"
 
             w.writerow(out)
             n = len(group_rows)
