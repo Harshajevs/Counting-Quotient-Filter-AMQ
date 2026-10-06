@@ -63,12 +63,47 @@ def grouped_bar(rows, value_key, title, ylabel, fname, log_scale=False, note_zer
     print(f"wrote {out_path}")
 
 
+def _zipf_distinct_keys(csv_path):
+    """Return the number of distinct Zipf keys for the current benchmark.
+
+    Normal benchmark runs write this value to data/manifest.txt.  The
+    checked-in results archive does not include generated data, so fall back
+    to the distinct-key count used to produce its current Zipf results.
+    """
+    project_root = os.path.abspath(os.path.join(os.path.dirname(csv_path), os.pardir))
+    manifest_path = os.path.join(project_root, "data", "manifest.txt")
+    try:
+        with open(manifest_path, encoding="utf-8") as f:
+            for line in f:
+                if line.startswith("zipf_distinct_keys="):
+                    return int(line.split("=", 1)[1].strip())
+    except (OSError, ValueError):
+        pass
+    return 14_061
+
+
+def _theoretical_bloom_fp(config_param, n_distinct):
+    """Bloom FPR for the actual number of distinct inserted keys."""
+    parts = {}
+    for item in config_param.split(";"):
+        if "=" in item:
+            key, value = item.split("=", 1)
+            parts[key] = value
+    try:
+        m = int(parts["size_bits"])
+        k = int(parts["k"])
+    except (KeyError, ValueError):
+        return None
+    return (1.0 - pow(2.718281828459045, -(k * n_distinct) / m)) ** k
+
+
 def fp_comparison(rows, fname):
     fig, axes = plt.subplots(1, len(DIST_ORDER), figsize=(10, 4.5))
     if len(DIST_ORDER) == 1:
         axes = [axes]
 
     width = 0.35
+    zipf_distinct = _zipf_distinct_keys(CSV_PATH)
     for ax, dist in zip(axes, DIST_ORDER):
         filters, measured, theoretical = [], [], []
         for filt in FILTER_ORDER:
@@ -76,13 +111,39 @@ def fp_comparison(rows, fname):
             t = get(rows, filt, dist, "theoretical_fp_rate")
             if m is None:
                 continue
+
+            # For the duplicate-heavy Zipfian workload, the nominal 1/512
+            # target is not the workload-specific Bloom FPR: Bloom sees only
+            # the distinct inserted keys.  Cuckoo accepted only 24 inserts
+            # before failing, so a normal theoretical-FPR comparison is not
+            # meaningful for that run.  Leave the other graphs/results alone.
+            if dist == "zipfian" and filt == "bloom":
+                row = next(r for r in rows
+                           if r["filter"] == filt and r["distribution"] == dist)
+                t = _theoretical_bloom_fp(row["config_param"], zipf_distinct)
+            elif dist == "zipfian" and filt == "cuckoo":
+                t = None
+
             filters.append(filt)
             measured.append(m)
             theoretical.append(t)
-        x = range(len(filters))
+
+        x = list(range(len(filters)))
         ax.bar([i - width / 2 for i in x], measured, width, label="measured", color="#4C72B0")
-        ax.bar([i + width / 2 for i in x], theoretical, width, label="theoretical", color="#C44E52")
-        ax.set_xticks(list(x))
+
+        theoretical_x = [i + width / 2 for i, t in enumerate(theoretical) if t is not None]
+        theoretical_y = [t for t in theoretical if t is not None]
+        if theoretical_y:
+            ax.bar(theoretical_x, theoretical_y, width, label="theoretical", color="#C44E52")
+
+        # Make the failed Zipfian Cuckoo comparison explicit without drawing
+        # a misleading theoretical bar.
+        if dist == "zipfian" and "cuckoo" in filters:
+            i = filters.index("cuckoo")
+            ax.text(i + width / 2, 0.00182, "N/A",
+                    ha="center", va="bottom", fontsize=8)
+
+        ax.set_xticks(x)
         ax.set_xticklabels(filters)
         ax.set_title(dist)
         ax.set_ylabel("false-positive rate")
