@@ -95,6 +95,9 @@ python3 data/generate_data.py --outdir "$DATA_DIR" \
     --n "$EVAL_N" --universe "$UNIVERSE" --skew "$SKEW" \
     --neg "$NEG" --seed "$SEED"
 
+UNIFORM_DISTINCT=$(awk -F= '$1=="uniform_distinct_keys"{print $2}' "$DATA_DIR/manifest.txt")
+ZIPF_DISTINCT=$(awk -F= '$1=="zipf_distinct_keys"{print $2}' "$DATA_DIR/manifest.txt")
+
 echo "== Step 2/4: building benchmark binaries =="
 ./scripts/build_all.sh
 
@@ -106,10 +109,10 @@ for i in $(seq 1 "$REPEATS"); do
     echo "  CQF (qbits=$QBITS rbits=$RBITS)"
     ./cqf/bench_cqf \
         "$DATA_DIR/uniform_positive.txt" "$DATA_DIR/uniform_negative.txt" \
-        "$QBITS" "$RBITS" uniform "$RAW_CSV"
+        "$QBITS" "$RBITS" uniform "$RAW_CSV" default "$UNIFORM_DISTINCT"
     ./cqf/bench_cqf \
         "$DATA_DIR/zipf_positive.txt" "$DATA_DIR/zipf_negative.txt" \
-        "$QBITS" "$RBITS" zipfian "$RAW_CSV"
+        "$QBITS" "$RBITS" zipfian "$RAW_CSV" default "$ZIPF_DISTINCT"
 
     echo "  Cuckoo filter (capacity=$EVAL_N bits_per_item=$CUCKOO_BITS)"
     ./cuckoo/bench_cuckoo \
@@ -122,10 +125,10 @@ for i in $(seq 1 "$REPEATS"); do
     echo "  Bloom filter (size_bits=$BLOOM_BITS k=$BLOOM_K)"
     ./bloom/bench_bloom \
         "$DATA_DIR/uniform_positive.txt" "$DATA_DIR/uniform_negative.txt" \
-        "$BLOOM_BITS" "$BLOOM_K" uniform "$RAW_CSV"
+        "$BLOOM_BITS" "$BLOOM_K" uniform "$RAW_CSV" "$UNIFORM_DISTINCT"
     ./bloom/bench_bloom \
         "$DATA_DIR/zipf_positive.txt" "$DATA_DIR/zipf_negative.txt" \
-        "$BLOOM_BITS" "$BLOOM_K" zipfian "$RAW_CSV"
+        "$BLOOM_BITS" "$BLOOM_K" zipfian "$RAW_CSV" "$ZIPF_DISTINCT"
 done
 
 echo "== Step 4/4: aggregating repeats into $OUT_CSV =="

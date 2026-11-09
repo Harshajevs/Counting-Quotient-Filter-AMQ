@@ -28,7 +28,17 @@ def load_rows(path):
 
 def get(rows, filt, dist, key):
     match = [r for r in rows if r["filter"] == filt and r["distribution"] == dist]
-    return float(match[0][key]) if match else None
+    if not match:
+        return None
+
+    raw = match[0].get(key, "")
+    if raw is None or str(raw).strip().lower() in {"", "na", "n/a", "nan", "none"}:
+        return None
+
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return None
 
 
 def grouped_bar(rows, value_key, title, ylabel, fname, log_scale=False, note_zero_as=None):

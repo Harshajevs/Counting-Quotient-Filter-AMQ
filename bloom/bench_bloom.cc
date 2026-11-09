@@ -8,7 +8,7 @@
  *
  * Usage:
  *   bench_bloom <positive_file> <negative_file> <size_bits> <num_hashes> \
- *               <distribution_label> <output_csv>
+ *               <distribution_label> <output_csv> [distinct_inserted]
  */
 
 #include <chrono>
@@ -19,6 +19,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <iterator>
 
 #include "bloom_filter.hpp"
 
@@ -29,6 +30,14 @@ static double elapsed_sec(Clock::time_point t0, Clock::time_point t1) {
 }
 
 static std::vector<std::uint64_t> read_keys(const std::string &path) {
+    if (path.size() >= 4 && path.substr(path.size()-4) == ".bin") {
+        std::ifstream bin(path, std::ios::binary | std::ios::ate);
+        if (!bin) { std::fprintf(stderr, "[bloom] could not open %s\n", path.c_str()); std::exit(EXIT_FAILURE); }
+        auto bytes = bin.tellg();
+        if (bytes < 0 || bytes % static_cast<std::streamoff>(sizeof(std::uint64_t))) std::exit(EXIT_FAILURE);
+        std::vector<std::uint64_t> out(static_cast<std::size_t>(bytes) / sizeof(std::uint64_t));
+        bin.seekg(0); bin.read(reinterpret_cast<char*>(out.data()), bytes); return out;
+    }
     std::ifstream in(path);
     if (!in) {
         std::fprintf(stderr, "[bloom] could not open %s\n", path.c_str());
@@ -59,7 +68,7 @@ static void write_csv_header_if_needed(const std::string &path) {
 }
 
 int main(int argc, char **argv) {
-    if (argc < 7) {
+    if (argc < 7 || argc > 8) {
         std::fprintf(stderr,
             "Usage: %s <positive_file> <negative_file> <size_bits> <num_hashes> "
             "<distribution_label> <output_csv>\n", argv[0]);
@@ -72,6 +81,9 @@ int main(int argc, char **argv) {
     const std::size_t num_hashes = static_cast<std::size_t>(std::strtoull(argv[4], nullptr, 10));
     const std::string dist_label = argv[5];
     const std::string out_csv = argv[6];
+    const std::size_t distinct_inserted = argc == 8
+        ? static_cast<std::size_t>(std::strtoull(argv[7], nullptr, 10))
+        : 0;
 
     if (size_bits == 0 || num_hashes == 0) {
         std::fprintf(stderr, "[bloom] size_bits and num_hashes must be positive\n");
@@ -112,12 +124,12 @@ int main(int argc, char **argv) {
         ? 0.0
         : static_cast<double>(false_positives) / static_cast<double>(neg.size());
 
-    // Standard Bloom-filter FPR approximation for n inserted operations and m bits.
-    // For the Zipfian workload this is intentionally conservative because many
-    // insertions are duplicates; duplicates do not set additional bits.
+    // Bloom FPR depends on distinct inserted keys, not repeated operations.
+    // The scalable data generator writes exact distinct counts to manifest.txt;
+    // the optional CLI argument supplies that value for large workloads.
     const double k = static_cast<double>(num_hashes);
     const double m = static_cast<double>(size_bits);
-    const double n = static_cast<double>(n_inserted);
+    const double n = static_cast<double>(distinct_inserted ? distinct_inserted : n_inserted);
     const double theoretical_fp = std::pow(1.0 - std::exp(-k * n / m), k);
 
     char config_param[96];
@@ -140,7 +152,7 @@ int main(int argc, char **argv) {
         "bloom,%s,%zu,%zu,%s,%zu,"
         "%.9f,%.2f,"
         "%.9f,%.2f,%zu,"
-        "%.9f,%.2f,%.8f,%.8f,%.4f,"
+        "%.9f,%.2f,%.12g,%.12g,%.8g,"
         "0.000000000,0.00,0\n",
         dist_label.c_str(), pos.size(), n_inserted, config_param, filter.size_in_bytes(),
         insert_time, insert_ops,

@@ -62,18 +62,21 @@ def main():
                 out[c] = group_rows[0][c]
 
             for c in NUMERIC_AVG_COLS:
-                vals = [float(r[c]) for r in group_rows]
+                # N/A is used when a filter cannot complete the requested
+                # workload (e.g. Cuckoo on duplicate-heavy Zipfian input), so
+                # its nominal FPR is not a meaningful operating-point value.
+                raw_vals = [r[c] for r in group_rows]
+                if any(v.strip().upper() in ("NA", "N/A", "") for v in raw_vals):
+                    out[c] = "NA"
+                    continue
+                vals = [float(v) for v in raw_vals]
                 value = sum(vals) / len(vals)
-                # Keep the same human-readable precision as the individual
-                # benchmark drivers while retaining enough detail for analysis.
                 if c.endswith("_time_s"):
                     out[c] = f"{value:.9f}"
                 elif c.endswith("_ops_sec"):
                     out[c] = f"{value:.2f}"
-                elif c in ("measured_fp_rate", "theoretical_fp_rate"):
-                    out[c] = f"{value:.8f}"
-                elif c == "fp_ratio":
-                    out[c] = f"{value:.4f}"
+                elif c in ("measured_fp_rate", "theoretical_fp_rate", "fp_ratio"):
+                    out[c] = f"{value:.12g}"
                 else:
                     out[c] = f"{value:.6f}"
 

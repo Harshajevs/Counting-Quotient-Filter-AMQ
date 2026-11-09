@@ -35,6 +35,14 @@ static double elapsed_sec(Clock::time_point t0, Clock::time_point t1) {
 }
 
 static std::vector<uint64_t> read_keys(const std::string &path) {
+    if (path.size() >= 4 && path.substr(path.size()-4) == ".bin") {
+        std::ifstream bin(path, std::ios::binary | std::ios::ate);
+        if (!bin) { fprintf(stderr, "Could not open %s\n", path.c_str()); exit(1); }
+        auto bytes = bin.tellg();
+        if (bytes < 0 || bytes % static_cast<std::streamoff>(sizeof(uint64_t))) exit(1);
+        std::vector<uint64_t> out(static_cast<size_t>(bytes) / sizeof(uint64_t));
+        bin.seekg(0); bin.read(reinterpret_cast<char*>(out.data()), bytes); return out;
+    }
     std::ifstream in(path);
     if (!in) {
         fprintf(stderr, "Could not open %s\n", path.c_str());
@@ -96,6 +104,14 @@ static void run_bench(const std::vector<uint64_t> &pos, const std::vector<uint64
 
     double measured_fp = neg.empty() ? 0.0 : (double)false_positives / (double)neg.size();
     double theoretical_fp = 8.0 / (double)(1ULL << BITS); /* 2*assoc(=4) / 2^bits */
+    char theoretical_fp_text[32], fp_ratio_text[32];
+    if (n_inserted < pos.size()) {
+        std::snprintf(theoretical_fp_text, sizeof(theoretical_fp_text), "NA");
+        std::snprintf(fp_ratio_text, sizeof(fp_ratio_text), "NA");
+    } else {
+        std::snprintf(theoretical_fp_text, sizeof(theoretical_fp_text), "%.12g", theoretical_fp);
+        std::snprintf(fp_ratio_text, sizeof(fp_ratio_text), "%.8g", theoretical_fp > 0.0 ? measured_fp / theoretical_fp : 0.0);
+    }
 
     /* ---- delete ---- */
     t0 = Clock::now();
@@ -116,13 +132,13 @@ static void run_bench(const std::vector<uint64_t> &pos, const std::vector<uint64
         "cuckoo,%s,%zu,%zu,%s,%zu,"
         "%.6f,%.2f,"
         "%.6f,%.2f,%zu,"
-        "%.6f,%.2f,%.8f,%.8f,%.4f,"
+        "%.6f,%.2f,%.12g,%s,%s,"
         "%.6f,%.2f,%zu\n",
         dist_label.c_str(), pos.size(), n_inserted, config_param, mem_bytes,
         insert_time, n_inserted / (insert_time > 0 ? insert_time : 1e-9),
         query_pos_time, n_inserted / (query_pos_time > 0 ? query_pos_time : 1e-9), found_pos,
         query_neg_time, neg.size() / (query_neg_time > 0 ? query_neg_time : 1e-9),
-        measured_fp, theoretical_fp, (theoretical_fp > 0 ? measured_fp / theoretical_fp : 0.0),
+        measured_fp, theoretical_fp_text, fp_ratio_text,
         delete_time, n_inserted / (delete_time > 0 ? delete_time : 1e-9), deleted_ok);
     fclose(csv);
 

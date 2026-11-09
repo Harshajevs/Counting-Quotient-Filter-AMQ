@@ -81,87 +81,123 @@ def gen_zipfian_keys(n: int, universe: int, skew: float, seed: int) -> np.ndarra
     return np.where(keys == 0, np.uint64(1), keys)
 
 
-def gen_negative_keys(n_neg: int, positive_set: Set[int], seed: int) -> np.ndarray:
-    """Generate n_neg keys guaranteed not to occur in positive_set."""
+def gen_negative_keys(n_neg: int, positive_keys: np.ndarray, seed: int) -> np.ndarray:
+    """Generate negatives disjoint from positives using vectorized binary search.
+
+    Unlike a Python set, this remains practical for tens of millions of keys.
+    """
     rng = np.random.default_rng(seed)
+    sorted_positive = np.sort(positive_keys)
     out = []
-    while len(out) < n_neg:
-        batch = rng.integers(1, UINT64_MAX, size=max(n_neg - len(out), 4096), dtype=np.uint64)
-        for value in batch:
-            k = int(value)
-            if k not in positive_set:
-                out.append(k)
-                if len(out) == n_neg:
-                    break
-    return np.asarray(out, dtype=np.uint64)
+    remaining = n_neg
+    while remaining:
+        batch = rng.integers(1, UINT64_MAX, size=max(remaining * 2, 4096), dtype=np.uint64)
+        idx = np.searchsorted(sorted_positive, batch)
+        valid = idx >= sorted_positive.size
+        in_range = ~valid
+        valid[in_range] = sorted_positive[idx[in_range]] != batch[in_range]
+        accepted = batch[valid]
+        if accepted.size:
+            take = min(remaining, accepted.size)
+            out.append(accepted[:take])
+            remaining -= take
+    return np.concatenate(out).astype(np.uint64, copy=False)
 
 
 def write_keys(path: str, keys: np.ndarray) -> None:
+    if path.endswith(".bin"):
+        # Native little-endian uint64 stream; C/C++ drivers mmap/read it fast.
+        np.asarray(keys, dtype=np.uint64).tofile(path)
+        return
+    # Text remains supported for backwards compatibility.
     with open(path, "w", encoding="utf-8") as f:
-        f.write("\n".join(str(int(k)) for k in keys))
-        f.write("\n")
+        chunk = 250_000
+        for start in range(0, len(keys), chunk):
+            part = keys[start:start + chunk]
+            f.write("\n".join(str(int(k)) for k in part))
+            f.write("\n")
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--outdir", required=True)
-    ap.add_argument("--n", type=int, default=1_000_000,
-                    help="number of insert operations in each positive workload")
-    ap.add_argument("--universe", type=int, default=PAPER_ZIPF_UNIVERSE,
-                    help="finite Zipfian universe (paper uses about 201 million)")
-    ap.add_argument("--skew", type=float, default=1.5,
-                    help="Zipfian coefficient (paper uses 1.5)")
-    ap.add_argument("--neg", type=int, default=100_000,
-                    help="number of independent negative queries")
+    ap.add_argument("--n", type=int, default=1_000_000)
+    ap.add_argument("--universe", type=int, default=PAPER_ZIPF_UNIVERSE)
+    ap.add_argument("--skew", type=float, default=1.5)
+    ap.add_argument("--neg", type=int, default=100_000)
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--binary", action="store_true", help="write raw uint64 .bin files")
     args = ap.parse_args()
-
-    if args.n <= 0 or args.neg <= 0:
-        raise SystemExit("--n and --neg must be positive")
-    if args.universe <= 0:
-        raise SystemExit("--universe must be positive")
-
+    if args.n <= 0 or args.neg <= 0 or args.universe <= 0 or args.skew <= 1.0:
+        raise SystemExit("n, neg, universe must be positive and skew must exceed 1")
     os.makedirs(args.outdir, exist_ok=True)
+    ext = "bin" if args.binary else "txt"
+    chunk = 1_000_000
 
-    print(f"Generating {args.n} uniform-random 64-bit keys (seed={args.seed})...")
-    uniform = gen_uniform_keys(args.n, args.seed)
-    write_keys(os.path.join(args.outdir, "uniform_positive.txt"), uniform)
+    # Uniform stream: full-width 64-bit values, matching the paper's input
+    # representation. Independent negative draws have negligible overlap
+    # probability at this workload size.
+    print(f"Generating {args.n} uniform keys in chunks...")
+    rng_u = np.random.default_rng(args.seed)
+    with open(os.path.join(args.outdir, f"uniform_positive.{ext}"), "wb" if args.binary else "w") as f:
+        for start in range(0, args.n, chunk):
+            count = min(chunk, args.n-start)
+            vals = rng_u.integers(1, np.uint64(1 << 63), size=count, dtype=np.uint64)
+            if args.binary: vals.tofile(f)
+            else: f.write("\n".join(map(str, vals.tolist()))+"\n")
+    uniform_distinct = args.n  # 64-bit birthday collision probability is negligible at this scale.
+    rng_neg = np.random.default_rng(args.seed+1)
+    with open(os.path.join(args.outdir, f"uniform_negative.{ext}"), "wb" if args.binary else "w") as f:
+        left=args.neg
+        while left:
+            count=min(left,chunk)
+            vals=rng_neg.integers(1, UINT64_MAX, size=count, dtype=np.uint64)
+            if args.binary: vals.tofile(f)
+            else: f.write("\n".join(map(str, vals.tolist()))+"\n")
+            left-=count
 
-    print(f"Generating {args.n} Zipfian keys (universe={args.universe}, skew={args.skew})...")
-    zipf = gen_zipfian_keys(args.n, args.universe, args.skew, args.seed)
-    write_keys(os.path.join(args.outdir, "zipf_positive.txt"), zipf)
+    # Zipf stream: keep only a compact dictionary of distinct ranks/counts,
+    # rather than materialising 67M Python integers or a giant NumPy sort.
+    print(f"Generating {args.n} Zipf keys in chunks (universe={args.universe}, skew={args.skew})...")
+    rng_z=np.random.default_rng(args.seed)
+    rank_counts={}
+    with open(os.path.join(args.outdir, f"zipf_positive.{ext}"), "wb" if args.binary else "w") as f:
+        remaining=args.n
+        while remaining:
+            count=min(chunk,remaining)
+            ranks=sample_zipf_bounded(rng_z,count,args.universe,args.skew)
+            keys=splitmix64(ranks,args.seed)
+            keys=np.where(keys==0,np.uint64(1),keys).astype(np.uint64,copy=False)
+            if args.binary: keys.tofile(f)
+            else: f.write("\n".join(map(str, keys.tolist()))+"\n")
+            u,c=np.unique(ranks,return_counts=True)
+            for rank,freq in zip(u.tolist(),c.tolist()): rank_counts[rank]=rank_counts.get(rank,0)+freq
+            remaining-=count
+    zipf_distinct=len(rank_counts)
+    zipf_max_frequency=max(rank_counts.values()) if rank_counts else 0
+    zipf_key_set=set(int(splitmix64(np.asarray([r],dtype=np.uint64),args.seed)[0]) for r in rank_counts)
+    rng_neg=np.random.default_rng(args.seed+101)
+    with open(os.path.join(args.outdir, f"zipf_negative.{ext}"), "wb" if args.binary else "w") as f:
+        written=0
+        while written<args.neg:
+            vals=rng_neg.integers(1,UINT64_MAX,size=max(4096,min(chunk,(args.neg-written)*2)),dtype=np.uint64)
+            accepted=[int(v) for v in vals if int(v) not in zipf_key_set]
+            take=accepted[:args.neg-written]
+            if take:
+                arr=np.asarray(take,dtype=np.uint64)
+                if args.binary: arr.tofile(f)
+                else: f.write("\n".join(map(str,take))+"\n")
+                written+=len(take)
 
-    print(f"Generating {args.neg} independent negative keys for each workload...")
-    uniform_set = {int(k) for k in uniform}
-    zipf_set = {int(k) for k in zipf}
-    uniform_neg = gen_negative_keys(args.neg, uniform_set, args.seed + 1)
-    zipf_neg = gen_negative_keys(args.neg, zipf_set, args.seed + 101)
-    write_keys(os.path.join(args.outdir, "uniform_negative.txt"), uniform_neg)
-    write_keys(os.path.join(args.outdir, "zipf_negative.txt"), zipf_neg)
-
-    zipf_max_frequency = 0
-    if zipf.size:
-        _, zipf_counts = np.unique(zipf, return_counts=True)
-        zipf_max_frequency = int(zipf_counts.max())
-
-    manifest = {
-        "n": args.n,
-        "universe": args.universe,
-        "skew": args.skew,
-        "neg": args.neg,
-        "seed": args.seed,
-        "uniform_distinct_keys": len(uniform_set),
-        "zipf_distinct_keys": len(zipf_set),
-        "zipf_max_frequency": zipf_max_frequency,
-    }
-    with open(os.path.join(args.outdir, "manifest.txt"), "w", encoding="utf-8") as f:
-        for key, value in manifest.items():
-            f.write(f"{key}={value}\n")
-
-    print("Done. Files written to:", args.outdir)
-    print(f"  uniform distinct = {len(uniform_set):,}")
-    print(f"  zipf distinct    = {len(zipf_set):,}")
-
+    manifest={"n":args.n,"universe":args.universe,"skew":args.skew,"neg":args.neg,
+              "seed":args.seed,"uniform_distinct_keys":uniform_distinct,
+              "zipf_distinct_keys":zipf_distinct,"zipf_max_frequency":zipf_max_frequency,
+              "uniform_distinct_note":"N assumed; 64-bit birthday collision probability is negligible at this scale"}
+    with open(os.path.join(args.outdir,"manifest.txt"),"w",encoding="utf-8") as f:
+        for key,value in manifest.items(): f.write(f"{key}={value}\n")
+    print("Done. Files written to:",args.outdir)
+    print(f"  uniform distinct ~= {uniform_distinct:,}")
+    print(f"  zipf distinct     = {zipf_distinct:,}")
 
 if __name__ == "__main__":
     main()

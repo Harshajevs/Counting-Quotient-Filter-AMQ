@@ -1,0 +1,16 @@
+requested_operations=67000000
+negative_queries=10000000
+uniform_distinct_keys=67000000
+zipf_distinct_keys=229118
+zipf_universe=201000000
+zipf_skew=1.5
+target_fpr=1/256
+cqf_qbits=27
+cqf_slots=134217728
+cqf_rbits=8
+cqf_uniform_distinct_load=0.49918890
+cqf_zipf_distinct_load=0.00170706
+cuckoo_fingerprint_bits=12
+bloom_bits=773284542
+bloom_hash_functions=8
+repeats=1
