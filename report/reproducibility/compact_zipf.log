@@ -1,0 +1,33 @@
+[cqf] loaded 67000000 positive, 10000000 negative keys (qbits=19 rbits=9, mode=default)
+[cqf] table allocation complete (slots=524288)
+[cqf] inserted 10000000/67000000
+[cqf] inserted 20000000/67000000
+[cqf] inserted 30000000/67000000
+[cqf] inserted 40000000/67000000
+[cqf] inserted 50000000/67000000
+[cqf] inserted 60000000/67000000
+[cqf] insert phase complete: 4.39 Mops/s
+[cqf] geometry: slots=524288 occupied=362364 stored_fingerprints=229009 total_count=67000000
+[cqf] positive lookups 10000000/67000000
+[cqf] positive lookups 20000000/67000000
+[cqf] positive lookups 30000000/67000000
+[cqf] positive lookups 40000000/67000000
+[cqf] positive lookups 50000000/67000000
+[cqf] positive lookups 60000000/67000000
+[cqf] positive lookup phase complete: 17.24 Mops/s
+[cqf] negative lookup phase complete: 30.00 Mops/s
+[cqf] delete progress: 5000000/67000000 occurrences
+[cqf] delete progress: 10000000/67000000 occurrences
+[cqf] delete progress: 15000000/67000000 occurrences
+[cqf] delete progress: 20000000/67000000 occurrences
+[cqf] delete progress: 25000000/67000000 occurrences
+[cqf] delete progress: 30000000/67000000 occurrences
+[cqf] delete progress: 35000000/67000000 occurrences
+[cqf] delete progress: 40000000/67000000 occurrences
+[cqf] delete progress: 45000000/67000000 occurrences
+[cqf] delete progress: 50000000/67000000 occurrences
+[cqf] delete progress: 55000000/67000000 occurrences
+[cqf] delete progress: 60000000/67000000 occurrences
+[cqf] delete progress: 65000000/67000000 occurrences
+[cqf] delete phase complete: 2.47 Mops/s
+[cqf] done: inserted=67000000 found_pos=67000000 measured_fp=0.0008755 theoretical_fp=0.000853519887 deleted_ok=67000000

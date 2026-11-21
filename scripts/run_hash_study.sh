@@ -48,6 +48,8 @@ if [[ ! -f "$DATA/manifest.txt" ]] || \
 else
   echo "Reusing matching generated workload: $DATA"
 fi
+# Exact verification is excluded from every timed filter phase.
+python3 scripts/audit_workloads.py "$DATA"
 UNIFORM_DISTINCT=$(awk -F= '$1=="uniform_distinct_keys"{print $2}' "$DATA/manifest.txt")
 ZIPF_DISTINCT=$(awk -F= '$1=="zipf_distinct_keys"{print $2}' "$DATA/manifest.txt")
 # Use the smallest power-of-two table that leaves at least 5% headroom.

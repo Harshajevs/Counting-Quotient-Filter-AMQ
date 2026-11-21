@@ -1,0 +1,36 @@
+\section{Filter Background and Implementation Scope}
+An AMQ structure represents a set or multiset using a compact probabilistic encoding. We use $N$ for the number of insertion operations and $D$ for the number of distinct original keys. These are nearly the same for our uniform workload, but differ sharply under skew. A counting filter must preserve multiplicity; a set-membership filter only needs to remember that a key occurred.
+
+\subsection{Seven families, with different capabilities}
+\begin{table}[!htbp]
+\centering\small
+\caption{Capabilities of the implementations evaluated here. Deletion assumes the caller removes a known inserted occurrence. CBF counters support repeated-key updates; they do not make per-key counts exact in the presence of collisions.}
+\label{tab:capabilities}
+\begin{tabular}{L{2.7cm}L{4.9cm}ccc}
+\toprule
+\textbf{Filter}&\textbf{Representation in this benchmark}&\textbf{Insert}&\textbf{Delete}&\textbf{Repeated input}\\\midrule
+CQF&Rank/select metadata and encoded counters&Yes&Yes&Encoded counts$^*$\\
+Cuckoo&12-bit fingerprints; four-way buckets&Yes&Yes&Limited copies\\
+Bloom&Bit array; two-base-hash probing&Yes&No&Same bits\\
+Counting Bloom&Packed 4-bit counters and overflow map&Yes&Yes&Counter updates\\
+Blocked Bloom&512-bit blocks; 20\% space guard&Yes&No&Same bits\\
+XOR&Three-partite peeling; packed fingerprints&Build&No&Deduplicated\\
+Binary Fuse-style&Three-consecutive-segment peeling&Build&No&Deduplicated\\\bottomrule
+\end{tabular}
+\vspace{3pt}
+\begin{minipage}{0.97\linewidth}\footnotesize $^*$CQF counts are exact for represented fingerprints; distinct original keys that collide can contribute to an overcount. ``Build'' is immutable batch construction, not online insertion.\end{minipage}
+\end{table}
+
+\textbf{Bloom and Counting Bloom.} Bloom filters set several positions in a bit array~\cite{bloom1970}. Our Bloom implementation takes integer keys directly and uses double hashing, $h_i(x)=(h_1(x)+i h_2(x))\bmod m$, following the two-base-hash approach of Kirsch and Mitzenmacher~\cite{kirsch2006}. Counting Bloom replaces bits by counters. Our implementation packs the common counts into four bits and stores values above 15 in an overflow map, avoiding silent saturation on hot keys. This is a scalar benchmark variant, not the Counting Bloom implementation evaluated in the CQF paper.
+
+\textbf{Cuckoo and Blocked Bloom.} Cuckoo stores a short fingerprint in one of two candidate buckets~\cite{fan2014,cuckoocode}. Repeated copies compete for the same small bucket pair; the tested version does not compress them into a counter. Blocked Bloom directs all probes for a key to one 512-bit block, a locality-oriented design related to blocked Bloom filters~\cite{putze2007}. Its 20\% allocation guard and its additional mixing work are part of the measured implementation.
+
+\textbf{XOR and Binary Fuse-style.} XOR construction peels a graph and assigns fingerprints so that the XOR of three queried cells matches a key's fingerprint~\cite{graf2020}. Our Fuse-style variant uses three consecutive segments and the same broad peeling principle~\cite{graf2022}. Both are local scalar implementations. The Fuse-style variant is not the authors' optimized Binary Fuse implementation; no published Binary Fuse throughput claim is transferred to it.
+
+\subsection{What the CQF adds}
+The CQF stores a fingerprint of $p=q+r$ bits. Its quotient identifies a home slot in a $2^q$-slot table, while its remainder is stored in the corresponding run. Occupied and run-end bit vectors, together with block offsets, locate runs through rank and select. Repeated fingerprints use variable-length counter encodings rather than one table entry for every occurrence~\cite{pandey2017,cqfcode}.
+
+For example, inserting the sequence $a,a,a,b$ creates four update operations but only two distinct original keys. A membership-only filter can represent $\{a,b\}$, whereas a counting filter must retain enough information to remove one occurrence of $a$ and still recognize the remaining two. Our positive-query phase replays all four operations, so $a$ also receives three times the query weight of $b$. This simple distinction connects the capability table to the different space and throughput results under skew. It is why $N$, $D$ and the query distribution are kept separate throughout the report.
+
+
+\clearpage

@@ -1,0 +1,3 @@
+filter,distribution,n_requested,n_inserted,config_param,memory_bytes,insert_time_s,insert_ops_sec,query_pos_time_s,query_pos_ops_sec,found_positive,query_neg_time_s,query_neg_ops_sec,measured_fp_rate,theoretical_fp_rate,fp_ratio,delete_time_s,delete_ops_sec,deleted_ok
+cqf,uniform,63753420,63753420,qbits=26;rbits=9;hash=default;delete=NA,93437184,42.121444333,1513580.74,8.351653667,7633780.38,63753420,0.957075667,10448810.77,0.0018524,0.00185546872672,0.99834612,NA,NA,NA
+cqf,uniform,63753420,63753420,qbits=27;rbits=9;hash=default;delete=NA,186807707,40.235893667,1584499.31,6.479483000,9839627.24,63753420,0.702418333,14248823.30,0.0009256,0.000927734363358,0.99769938,NA,NA,NA

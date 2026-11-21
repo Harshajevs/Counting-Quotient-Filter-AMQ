@@ -1,0 +1,70 @@
+\section{Discussion, Limitations and Next Steps}
+\subsection{Choosing a filter from the measured trade-offs}
+The results support a capability-based choice. If a system only needs membership while constructing an immutable snapshot, XOR and the Fuse-style variant make compact final representations with three-cell queries. Their preparation, rebuild cost and construction workspace still have to fit the system. A continuously updated set needs a different comparison: Bloom and Blocked Bloom offer low-cost membership updates, while Cuckoo supports deletion when duplicate-copy pressure is manageable. A multiset that requires occurrence-by-occurrence deletion needs explicit counter behaviour.
+
+\begin{table}[!htbp]\centering\small
+\caption{How to use the evidence from this study. These are workload-specific considerations, not universal recommendations for every implementation of each family.}
+\label{tab:selection}
+\begin{tabular}{L{4.0cm}L{4.2cm}L{4.4cm}}\toprule
+\textbf{Required behaviour}&\textbf{Candidates to examine}&\textbf{Cost that remains visible}\\\midrule
+Membership with online additions&Bloom; Blocked Bloom&No supported deletion; different locality/space budgets\\
+Known-member deletion with few repeats&Cuckoo; CQF; Counting Bloom&Capacity failures, counters and achieved FPR\\
+Many repeated occurrences with deletion&CQF; Counting Bloom&Counter storage and conservative versus distinct-aware capacity\\
+Immutable membership snapshot&XOR; Fuse-style&Preparation, build/rebuild work and unmeasured peak workspace\\
+Changing CQF hash path&Default; invertible; external mixer&End-to-end operation mix and fingerprint-domain collisions\\\bottomrule
+\end{tabular}
+\end{table}
+
+CQF's value in this study is the combination of compact fingerprint counting and deletion under repeated input, with a configurable hash path. Its primary operation-sized footprint also demonstrates how easily an allocation rule can hide that value. Counting Bloom provides a useful counter baseline, but overflow storage and per-probe updates change its cost under skew. Neither a fast membership query nor a small final array alone captures these differences.
+
+\subsection{Reading separate query rates as an operation mix}
+A workload rarely consists entirely of successful or unsuccessful queries. To make the two measured query classes easier to interpret, let $\alpha$ be the fraction of positive queries, and let $\bar c_+$ and $\bar c_-$ be their mean batch-derived costs in seconds per query. A simple sequential query-only model gives
+\begin{equation}
+R(\alpha)=\frac{1}{\alpha\bar c_+ +(1-\alpha)\bar c_-}.
+\label{eq:query-mix}
+\end{equation}
+This is a calculation from the existing batches, not a newly timed mixed workload. It assumes that each class retains its measured average cost and excludes updates, construction and the underlying database lookup.
+
+\begin{table}[!htbp]\centering\small
+\caption{Calculated query-only throughput in M/s from mean per-query batch costs at 67M operations. The percentage gives $\alpha$, the fraction of positives. The skewed model preserves the measured frequency-weighted positive stream and uniform absent-key negatives. Cuckoo's incomplete skewed workload is unavailable.}
+\label{tab:query-mix}
+\input{tables/query_mix.tex}
+\end{table}
+
+On uniform input, Cuckoo leads these query-only examples, but that result cannot satisfy a heavy-repeat counting requirement. In the skewed 50\% example, CQF reaches a calculated 21.91\,M/s against Counting Bloom's 19.97\,M/s: its faster positive queries offset its slower negatives at that particular mix. Changing the mix changes the balance. The immutable filters have high query-only rates on this skewed set, while their preparation and rebuild costs remain outside the model.
+
+\clearpage
+
+\subsection{Limits of the evidence}
+\begin{itemize}
+\item \textbf{Platform and repetitions.} These are single-threaded results from one translated x86-64 environment on Apple M2. We use three primary timing repetitions, one fixed input seed, a fixed operation order and no CPU affinity. Virtual CPU metadata is not a physical cache measurement. Timing SD describes this run set, not a cross-machine confidence interval.
+\item \textbf{Capacity and cardinality knowledge.} Several filters use exact offline $D$, while primary CQF/Cuckoo allocations use $N$. The compact CQF study is a documented sensitivity point, not an online resizing policy. The geometry control changes both load and fingerprint width.
+\item \textbf{Implementation scope.} The four added filters are scalar reference variants. Fuse-style is not the optimized Binary Fuse reference, and the Counting Bloom overflow design differs from the paper's baseline. We have not normalized every implementation to equal achieved FPR or equal memory.
+\item \textbf{Accuracy and operation semantics.} Fixed-query repeats are not independent new accuracy samples. Cuckoo introduces fresh, unrecorded hash randomness. The tests exercise known inserted deletions; deleting arbitrary absent keys can damage other members in probabilistic deletion structures. We do not claim exact original-key counts after fingerprint collisions.
+\item \textbf{System costs.} Final footprint excludes most process overhead and temporary construction storage. We do not evaluate SSD behaviour, concurrency, merging, adaptive queries, adversarial keys or benefits in a complete application.
+\end{itemize}
+
+\subsection{Validation behind the conclusions}
+Validation spans four levels: supported operations, input labels, workload completion and result summaries (Table~\ref{tab:validation-levels}). A correct filter alone does not establish that an experiment is valid: contaminated negatives, partial workloads or misleading aggregation can still change the comparison. These checks connect the implementation to the reported evidence.
+
+\begin{table}[!htbp]\centering\small
+\caption{Checks supporting the reported comparisons. Timing variation is described separately by repeated measurements.}
+\label{tab:validation-levels}
+\begin{tabular}{L{2.0cm}L{5.3cm}L{5.3cm}}\toprule
+\textbf{Level}&\textbf{Checked condition}&\textbf{Purpose}\\\midrule
+Functional&Repeated-key decrements, overflow counters and positive recognition&Exercise supported membership/counting operations\\
+Workload&Exact distinct count, maximum frequency, absent-key queries and file hashes&Establish the actual stream and its query labels\\
+Run&Accepted, recognized and deleted counts; expected repetition counts&Separate complete tasks from capacity failures and partial runs\\
+Summary&Unsupported-operation masking and raw-to-table regeneration&Keep dashes, failures, units and aggregates consistent\\\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Conclusion and focused future work}
+We have extended the earlier three-filter baseline into a complete seven-family evaluation at 67M operations, added a controlled CQF hash-path study, and made the data and validation steps inspectable. The strongest conclusions are concrete: duplicate handling changes whether a workload completes; capacity rounding changes the space comparison; immutable filters require preparation and rebuild accounting; and hash-path gains depend on the operation and input distribution.
+
+The next useful work follows directly from these findings. We would repeat the primary matrix on native x86-64 hardware with multiple input and filter seeds, compare configurations at matched achieved FPR and controlled memory budgets, and measure peak construction memory. For CQF specifically, we would test distinct-aware capacity rules with explicit counter headroom, then evaluate whether hash-path choices remain beneficial on application-generated keys. Lock-region tuning, heap-based merging and an application wrapper remain deferred directions from the earlier report; they are not presented as completed contributions here.
+
+These steps have a natural order. Native runs and randomized repetition order would first test whether the main rate differences persist without translation and fixed-order effects. A matched-accuracy matrix would then show which space differences remain after spare capacity and guard bits are accounted for. Finally, application traces could supply the successful-query fraction, repetition pattern and false-positive penalty needed to evaluate the cost model above. This sequence would turn the present controlled comparison into stronger deployment evidence without treating unmeasured system behaviour as an explanation for the current numbers.
+
+\finding{The main advance is a broader comparison that explains its own operating points. The measurements tell us when an implementation completes the task and what it pays for doing so.}
+\FloatBarrier

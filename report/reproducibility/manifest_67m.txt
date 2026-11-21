@@ -1,0 +1,9 @@
+n=67000000
+universe=201000000
+skew=1.5
+neg=10000000
+seed=42
+uniform_distinct_keys=67000000
+zipf_distinct_keys=229115
+zipf_max_frequency=25646925
+uniform_distinct_note=N assumed; 64-bit birthday collision probability is negligible at this scale

@@ -165,6 +165,12 @@ int main(int argc, char **argv) {
     fprintf(stderr, "[cqf] insert phase complete: %.2f Mops/s\n",
             n_inserted / (insert_time > 0 ? insert_time : 1e-9) / 1e6);
 
+    /* Audit counters outside every timed operation batch. */
+    fprintf(stderr, "[cqf] geometry: slots=%" PRIu64 " occupied=%" PRIu64
+                    " stored_fingerprints=%" PRIu64 " total_count=%" PRIu64 "\n",
+            nslots, qf_get_num_occupied_slots(&qf),
+            qf_get_num_distinct_key_value_pairs(&qf), qf_get_sum_of_counts(&qf));
+
     /* ---- positive lookups ---- */
     t0 = now_sec();
     uint64_t found_pos = 0;

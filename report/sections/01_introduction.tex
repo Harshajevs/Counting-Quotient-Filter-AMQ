@@ -1,0 +1,26 @@
+\begin{center}
+{\Large\bfseries\color{ink} Counting, Hashing and Scale}\\[3pt]
+{\large A Comparative Study of Seven Approximate Membership Filters}
+\end{center}
+\vspace{-5pt}
+\begin{abstract}
+Approximate membership filters save space by allowing a small probability of answering yes for an absent key. Choosing one becomes harder when the application also needs deletions, repeated-key counts, or a filter that remains practical beyond small workloads. We extend our earlier three-filter study in three directions: a 67-million-operation comparison, a controlled evaluation of three CQF hashing paths, and a common benchmark for seven filter families. The expanded suite includes Counting Quotient, Cuckoo, Bloom, Counting Bloom, Blocked Bloom, XOR and a scalar Binary Fuse-style filter. We separate online updates from immutable construction, verify workload cardinality and query disjointness exactly, and retain raw repetitions and configuration records. The results show that capacity rounding, duplicate semantics and hash choice can materially change the apparent ranking. At 67M uniform operations, \UniformFastestQuery{} has the highest measured positive-query throughput in our implementation set; the ordinary Cuckoo filter accepts only 24 operations on the duplicate-heavy stream. A separately sized CQF completes the full skewed stream and its deletions in \CompactMemory{}\,MB, compared with \PrimaryCqfMemory{}\,MB under the conservative primary sizing rule. Hash changes offer operation-specific gains at identical CQF memory, rather than one universally faster mode. All new measurements use an x86-64 Linux container translated on Apple M2, so they support comparisons within this setup and qualified comparisons with the earlier report and the SIGMOD reference results.
+\end{abstract}
+\noindent\textbf{Keywords:} approximate membership; counting quotient filter; hashing; skew; reproducible benchmarking.
+
+\section{Introduction}
+A filter often sits just before a much more expensive operation: a database lookup, a disk read, or a network request. It answers a simple question---``could this key be present?''---without storing every key. A no answer lets the system avoid the expensive operation. A yes answer may be a false positive and must be checked against the underlying data.
+
+Our mid-semester report established a shared benchmark for Bloom, Cuckoo and Counting Quotient Filters (CQF) at 996,148 insertion operations~\cite{midsem}. It confirmed basic counting and deletion behaviour, but left two questions open. First, would the same comparison hold when the workload grew to the approximately 67M-operation scale discussed by Pandey et al.~\cite{pandey2017}? Second, how much of the observed performance came from the filter representation, and how much came from hashing and capacity choices?
+
+This report addresses those questions and adds a broader choice of baselines. We include Counting Bloom and Blocked Bloom to examine the costs of counters and locality. We also include XOR and a Binary Fuse-style implementation to show what becomes possible when a filter can be built once from a complete set. These static filters solve a different update problem, so their construction costs are reported separately.
+
+Our contribution is an evaluation and reproducibility study built on established algorithms. We do not propose a new CQF representation or claim to reproduce every experiment in the original paper. The work adds:
+\begin{itemize}
+\item \textbf{Scale and controls:} all seven families at 1M and 67M operations, with a matched-operation-count CQF geometry experiment and additional error targets.
+\item \textbf{An explicit hash comparison:} the CQF's default and invertible modes, and a SplitMix64-style external mapping, with hashing included in the timed operation.
+\item \textbf{A fairer common record:} raw repetitions, unsupported-operation labels, failure censoring, static preparation costs, exact workload checks, and accuracy intervals using the actual negative-query sample size.
+\end{itemize}
+We present the comparison in the order needed to interpret it: capabilities and sizing, then uniform performance, repeated keys and immutable construction. The hash and geometry controls follow once those differences are visible. The discussion then brings together operation support, achieved accuracy and workload mix. Complete small-scale and hash tables are kept in the appendix, while the main text highlights the results that explain a change in ranking. This keeps the report readable on its own and retains the measurements needed to check its conclusions.
+\finding{A useful comparison must state what was stored, which operations completed, and how the filter was sized before it ranks throughput.}
+\clearpage

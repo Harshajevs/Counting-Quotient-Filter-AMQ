@@ -1,0 +1,87 @@
+\begin{thebibliography}{12}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[{CS-301 Project Group}(2026{\natexlab{a}})]{midsem}
+{CS-301 Project Group}.
+\newblock A general-purpose counting filter: Counting quotient filters (cqf),
+  2026{\natexlab{a}}.
+\newblock CS-301 progress report, Indian Institute of Technology Ropar, October
+  2026. Supplied four-page report.
+
+\bibitem[Pandey et~al.(2017)Pandey, Bender, Johnson, and Patro]{pandey2017}
+Prashant Pandey, Michael~A. Bender, Rob Johnson, and Rob Patro.
+\newblock A general-purpose counting filter: Making every bit count.
+\newblock In \emph{Proceedings of the 2017 ACM International Conference on
+  Management of Data (SIGMOD)}, pages 775--787, 2017.
+\newblock \doi{10.1145/3035918.3035963}.
+
+\bibitem[Bloom(1970)]{bloom1970}
+Burton~H. Bloom.
+\newblock Space/time trade-offs in hash coding with allowable errors.
+\newblock \emph{Communications of the ACM}, 13\penalty0 (7):\penalty0 422--426,
+  1970.
+\newblock \doi{10.1145/362686.362692}.
+
+\bibitem[Kirsch and Mitzenmacher(2006)]{kirsch2006}
+Adam Kirsch and Michael Mitzenmacher.
+\newblock Less hashing, same performance: Building a better bloom filter.
+\newblock In \emph{ESA}, volume 4168 of \emph{LNCS}, pages 456--467, 2006.
+\newblock \doi{10.1007/11841036_42}.
+
+\bibitem[Fan et~al.(2014)Fan, Andersen, Kaminsky, and Mitzenmacher]{fan2014}
+Bin Fan, David~G. Andersen, Michael Kaminsky, and Michael~D. Mitzenmacher.
+\newblock Cuckoo filter: Practically better than bloom.
+\newblock In \emph{CoNEXT}, pages 75--88, 2014.
+\newblock \doi{10.1145/2674005.2674994}.
+
+\bibitem[{Efficient Computing}(2026)]{cuckoocode}
+{Efficient Computing}.
+\newblock Cuckoo filter reference implementation.
+\newblock \url{https://github.com/efficient/cuckoofilter}, 2026.
+\newblock Accessed 21 November 2026.
+
+\bibitem[Putze et~al.(2007)Putze, Sanders, and Singler]{putze2007}
+Felix Putze, Peter Sanders, and Johannes Singler.
+\newblock Cache-, hash- and space-efficient bloom filters.
+\newblock In \emph{WEA}, volume 4525 of \emph{LNCS}, pages 108--121, 2007.
+\newblock \doi{10.1007/978-3-540-72845-0_9}.
+
+\bibitem[Graf and Lemire(2020)]{graf2020}
+Thomas~Mueller Graf and Daniel Lemire.
+\newblock Xor filters: Faster and smaller than bloom and cuckoo filters.
+\newblock \emph{ACM Journal of Experimental Algorithmics}, 25:\penalty0 1--16,
+  2020.
+\newblock \doi{10.1145/3376122}.
+
+\bibitem[Graf and Lemire(2022)]{graf2022}
+Thomas~Mueller Graf and Daniel Lemire.
+\newblock Binary fuse filters: Fast and smaller than xor filters.
+\newblock \emph{ACM Journal of Experimental Algorithmics}, 27\penalty0
+  (1.5):\penalty0 1--15, 2022.
+\newblock \doi{10.1145/3510449}.
+
+\bibitem[{SplatLab}(2026)]{cqfcode}
+{SplatLab}.
+\newblock Counting quotient filter reference implementation.
+\newblock \url{https://github.com/splatlab/cqf}, 2026.
+\newblock Accessed 21 November 2026.
+
+\bibitem[{CS-301 Project Group}(2026{\natexlab{b}})]{projectcode}
+{CS-301 Project Group}.
+\newblock Counting-quotient-filter-amq: project repository.
+\newblock \url{https://github.com/Harshajevs/Counting-Quotient-Filter-AMQ},
+  2026{\natexlab{b}}.
+\newblock Public head fe184baa6933, checked 21 November 2026; seven-filter
+  source from the supplied Phase-3 snapshot.
+
+\bibitem[Steele et~al.(2014)Steele, Lea, and Flood]{steele2014}
+Guy~L. Steele, Jr., Doug Lea, and Christine~H. Flood.
+\newblock Fast splittable pseudorandom number generators.
+\newblock In \emph{OOPSLA}, pages 453--472, 2014.
+\newblock \doi{10.1145/2660193.2660195}.
+
+\end{thebibliography}

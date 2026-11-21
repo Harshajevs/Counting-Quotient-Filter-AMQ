@@ -4,6 +4,7 @@
 cqf/bench_cqf
 cuckoo/bench_cuckoo
 bloom/bench_bloom
+filters/bench_extra_filters
 *.o
 
 # ==============================
@@ -26,3 +27,20 @@ __pycache__/
 # Generated benchmark datasets
 # ==============================
 results/data/
+
+# Extended experiment datasets and binaries (keep CSVs and plots)
+results/extended/*_data/
+results/extended/hash_data_*/
+results/extended/paper_scale_data_*/
+results/extended/paper_scale_data/
+results/extended/*.bin
+*.bin
+results/report_data_*/
+
+# LaTeX compiler intermediates (keep the final PDF and evidence logs)
+report/*.aux
+report/*.log
+report/*.blg
+report/*.out
+report/*.xdv
+report/*.synctex.gz

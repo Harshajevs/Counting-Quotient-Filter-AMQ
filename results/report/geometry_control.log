@@ -1,0 +1,120 @@
+[cqf] loaded 63753420 positive, 10000000 negative keys (qbits=26 rbits=9, mode=default)
+[cqf] table allocation complete (slots=67108864)
+[cqf] inserted 10000000/63753420
+[cqf] inserted 20000000/63753420
+[cqf] inserted 30000000/63753420
+[cqf] inserted 40000000/63753420
+[cqf] inserted 50000000/63753420
+[cqf] inserted 60000000/63753420
+[cqf] insert phase complete: 1.51 Mops/s
+[cqf] geometry: slots=67108864 occupied=63753420 stored_fingerprints=63694689 total_count=63753420
+[cqf] positive lookups 10000000/63753420
+[cqf] positive lookups 20000000/63753420
+[cqf] positive lookups 30000000/63753420
+[cqf] positive lookups 40000000/63753420
+[cqf] positive lookups 50000000/63753420
+[cqf] positive lookups 60000000/63753420
+[cqf] positive lookup phase complete: 7.67 Mops/s
+[cqf] negative lookup phase complete: 10.37 Mops/s
+[cqf] deletion skipped by experiment design
+[cqf] done: inserted=63753420 found_pos=63753420 measured_fp=0.0018524 theoretical_fp=0.00185546873 delete=N/A
+[cqf] loaded 63753420 positive, 10000000 negative keys (qbits=26 rbits=9, mode=default)
+[cqf] table allocation complete (slots=67108864)
+[cqf] inserted 10000000/63753420
+[cqf] inserted 20000000/63753420
+[cqf] inserted 30000000/63753420
+[cqf] inserted 40000000/63753420
+[cqf] inserted 50000000/63753420
+[cqf] inserted 60000000/63753420
+[cqf] insert phase complete: 1.51 Mops/s
+[cqf] geometry: slots=67108864 occupied=63753420 stored_fingerprints=63694689 total_count=63753420
+[cqf] positive lookups 10000000/63753420
+[cqf] positive lookups 20000000/63753420
+[cqf] positive lookups 30000000/63753420
+[cqf] positive lookups 40000000/63753420
+[cqf] positive lookups 50000000/63753420
+[cqf] positive lookups 60000000/63753420
+[cqf] positive lookup phase complete: 7.59 Mops/s
+[cqf] negative lookup phase complete: 10.46 Mops/s
+[cqf] deletion skipped by experiment design
+[cqf] done: inserted=63753420 found_pos=63753420 measured_fp=0.0018524 theoretical_fp=0.00185546873 delete=N/A
+[cqf] loaded 63753420 positive, 10000000 negative keys (qbits=26 rbits=9, mode=default)
+[cqf] table allocation complete (slots=67108864)
+[cqf] inserted 10000000/63753420
+[cqf] inserted 20000000/63753420
+[cqf] inserted 30000000/63753420
+[cqf] inserted 40000000/63753420
+[cqf] inserted 50000000/63753420
+[cqf] inserted 60000000/63753420
+[cqf] insert phase complete: 1.52 Mops/s
+[cqf] geometry: slots=67108864 occupied=63753420 stored_fingerprints=63694689 total_count=63753420
+[cqf] positive lookups 10000000/63753420
+[cqf] positive lookups 20000000/63753420
+[cqf] positive lookups 30000000/63753420
+[cqf] positive lookups 40000000/63753420
+[cqf] positive lookups 50000000/63753420
+[cqf] positive lookups 60000000/63753420
+[cqf] positive lookup phase complete: 7.65 Mops/s
+[cqf] negative lookup phase complete: 10.51 Mops/s
+[cqf] deletion skipped by experiment design
+[cqf] done: inserted=63753420 found_pos=63753420 measured_fp=0.0018524 theoretical_fp=0.00185546873 delete=N/A
+[cqf] loaded 63753420 positive, 10000000 negative keys (qbits=27 rbits=9, mode=default)
+[cqf] table allocation complete (slots=134217728)
+[cqf] inserted 10000000/63753420
+[cqf] inserted 20000000/63753420
+[cqf] inserted 30000000/63753420
+[cqf] inserted 40000000/63753420
+[cqf] inserted 50000000/63753420
+[cqf] inserted 60000000/63753420
+[cqf] insert phase complete: 1.58 Mops/s
+[cqf] geometry: slots=134217728 occupied=63753420 stored_fingerprints=63723989 total_count=63753420
+[cqf] positive lookups 10000000/63753420
+[cqf] positive lookups 20000000/63753420
+[cqf] positive lookups 30000000/63753420
+[cqf] positive lookups 40000000/63753420
+[cqf] positive lookups 50000000/63753420
+[cqf] positive lookups 60000000/63753420
+[cqf] positive lookup phase complete: 9.76 Mops/s
+[cqf] negative lookup phase complete: 13.69 Mops/s
+[cqf] deletion skipped by experiment design
+[cqf] done: inserted=63753420 found_pos=63753420 measured_fp=0.0009256 theoretical_fp=0.000927734363 delete=N/A
+[cqf] loaded 63753420 positive, 10000000 negative keys (qbits=27 rbits=9, mode=default)
+[cqf] table allocation complete (slots=134217728)
+[cqf] inserted 10000000/63753420
+[cqf] inserted 20000000/63753420
+[cqf] inserted 30000000/63753420
+[cqf] inserted 40000000/63753420
+[cqf] inserted 50000000/63753420
+[cqf] inserted 60000000/63753420
+[cqf] insert phase complete: 1.59 Mops/s
+[cqf] geometry: slots=134217728 occupied=63753420 stored_fingerprints=63723989 total_count=63753420
+[cqf] positive lookups 10000000/63753420
+[cqf] positive lookups 20000000/63753420
+[cqf] positive lookups 30000000/63753420
+[cqf] positive lookups 40000000/63753420
+[cqf] positive lookups 50000000/63753420
+[cqf] positive lookups 60000000/63753420
+[cqf] positive lookup phase complete: 9.86 Mops/s
+[cqf] negative lookup phase complete: 14.70 Mops/s
+[cqf] deletion skipped by experiment design
+[cqf] done: inserted=63753420 found_pos=63753420 measured_fp=0.0009256 theoretical_fp=0.000927734363 delete=N/A
+[cqf] loaded 63753420 positive, 10000000 negative keys (qbits=27 rbits=9, mode=default)
+[cqf] table allocation complete (slots=134217728)
+[cqf] inserted 10000000/63753420
+[cqf] inserted 20000000/63753420
+[cqf] inserted 30000000/63753420
+[cqf] inserted 40000000/63753420
+[cqf] inserted 50000000/63753420
+[cqf] inserted 60000000/63753420
+[cqf] insert phase complete: 1.58 Mops/s
+[cqf] geometry: slots=134217728 occupied=63753420 stored_fingerprints=63723989 total_count=63753420
+[cqf] positive lookups 10000000/63753420
+[cqf] positive lookups 20000000/63753420
+[cqf] positive lookups 30000000/63753420
+[cqf] positive lookups 40000000/63753420
+[cqf] positive lookups 50000000/63753420
+[cqf] positive lookups 60000000/63753420
+[cqf] positive lookup phase complete: 9.90 Mops/s
+[cqf] negative lookup phase complete: 14.35 Mops/s
+[cqf] deletion skipped by experiment design
+[cqf] done: inserted=63753420 found_pos=63753420 measured_fp=0.0009256 theoretical_fp=0.000927734363 delete=N/A

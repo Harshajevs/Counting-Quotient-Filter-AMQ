@@ -14,6 +14,9 @@ gcc -std=gnu11 -Wall -O2 -msse4.2 -mpopcnt -mbmi -mbmi2 \
 /tmp/test_cqf_counting
 rm -f /tmp/test_cqf_counting
 
+echo "== Additional filter regression tests =="
+./scripts/test_extra_filters.sh
+
 echo "== Data-generator regression test =="
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
@@ -34,5 +37,10 @@ assert not any(x in positive for x in negative)
 assert len(positive) > 1
 print("[test_data_generator] PASS")
 PY
+
+
+python3 tests/test_workload_audit.py
+python3 tests/test_report_validation.py
+python3 tests/test_asset_semantics.py
 
 echo "All functional regression tests passed."

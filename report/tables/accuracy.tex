@@ -1,0 +1,19 @@
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+\textbf{Input} & \textbf{Filter} & \textbf{First FPR} & \textbf{95\% interval} & \textbf{Repeat range} \\
+\midrule
+Uniform & CQF & 0.9692 & [0.9501, 0.9887] & 0.9692 \\
+Uniform & Cuckoo & 0.9865 & [0.9672, 1.0062] & 0.9661--0.9865 \\
+Uniform & Bloom & 1.9616 & [1.9344, 1.9892] & 1.9616 \\
+Uniform & Counting Bloom & 1.9771 & [1.9498, 2.0048] & 1.9771 \\
+Uniform & Blocked Bloom & 0.9730 & [0.9539, 0.9925] & 0.9730 \\
+Uniform & XOR & 1.9597 & [1.9325, 1.9873] & 1.9597 \\
+Uniform & Fuse-style & 0.9725 & [0.9534, 0.9920] & 0.9725 \\
+Skewed & CQF & 0.0025 & [0.0017, 0.0037] & 0.0025 \\
+Skewed & Bloom & 1.9577 & [1.9305, 1.9853] & 1.9577 \\
+Skewed & Counting Bloom & 1.9276 & [1.9006, 1.9550] & 1.9276 \\
+Skewed & Blocked Bloom & 0.9742 & [0.9551, 0.9937] & 0.9742 \\
+Skewed & XOR & 1.9322 & [1.9052, 1.9596] & 1.9322 \\
+Skewed & Fuse-style & 0.9810 & [0.9618, 1.0006] & 0.9810 \\
+\bottomrule
+\end{tabular}

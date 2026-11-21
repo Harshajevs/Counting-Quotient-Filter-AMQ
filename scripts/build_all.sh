@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# build_all.sh — compile the three benchmark drivers on Linux/x86_64.
+# build_all.sh — compile all seven AMQ benchmark drivers on Linux/x86_64.
 # CQF uses a runtime-selected BMI2/TZCNT rank-select fast path when available,
 # with a portable fallback in the same binary.
 set -euo pipefail
@@ -21,7 +21,12 @@ echo "== Building Bloom filter benchmark =="
 g++ -std=c++11 -Wall -Wextra -O3 -march=x86-64-v2 \
     bloom/bench_bloom.cc -o bloom/bench_bloom -lm
 
+echo "== Building additional AMQ filters (Counting Bloom, Blocked Bloom, XOR, Binary Fuse) =="
+g++ -std=c++17 -Wall -Wextra -O3 -march=x86-64-v2 \
+    -Ifilters filters/bench_extra_filters.cpp -o filters/bench_extra_filters
+
 echo "== Build complete =="
 echo "  cqf/bench_cqf"
 echo "  cuckoo/bench_cuckoo"
 echo "  bloom/bench_bloom"
+echo "  filters/bench_extra_filters"

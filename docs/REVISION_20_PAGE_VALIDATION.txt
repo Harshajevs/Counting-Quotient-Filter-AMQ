@@ -1,0 +1,16 @@
+20-PAGE REVISION VALIDATION — 21 November 2026 IST
+
+The revised PDF contains exactly 20 pages, including cover and appendices.
+All pages were rendered and visually reviewed for coherent topic boundaries,
+legible figures/tables, page balance, and clipping/overlap.
+LaTeX compilation: no overfull boxes, unresolved references or missing glyphs.
+The report has 8 figures and 18 tables.
+
+Existing raw benchmark measurements are unchanged. New material includes
+counting examples, construction-cost interpretation, detailed target sweep,
+query-mix modelling, validation hierarchy and data/code availability.
+The 21 query-mix cases were independently checked against original batch times;
+complete workloads recognize all N positives, while failed Cuckoo rows are
+masked. Synthetic endpoint and unequal-duration checks also passed.
+Seven Python audit/validation/asset-semantics regression tests passed.
+All 59 final packaged source SHA-256 checksums were verified.

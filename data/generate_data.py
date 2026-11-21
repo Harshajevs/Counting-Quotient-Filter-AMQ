@@ -134,9 +134,9 @@ def main() -> None:
     ext = "bin" if args.binary else "txt"
     chunk = 1_000_000
 
-    # Uniform stream: full-width 64-bit values, matching the paper's input
-    # representation. Independent negative draws have negligible overlap
-    # probability at this workload size.
+    # Uniform stream: uint64 storage, with positive values drawn from [1,2^63).
+    # Negatives span [1,2^64-1); audit_workloads.py verifies exact disjointness
+    # and cardinality before report runs (generation itself is not timed).
     print(f"Generating {args.n} uniform keys in chunks...")
     rng_u = np.random.default_rng(args.seed)
     with open(os.path.join(args.outdir, f"uniform_positive.{ext}"), "wb" if args.binary else "w") as f:

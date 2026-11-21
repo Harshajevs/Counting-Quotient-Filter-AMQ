@@ -1,7 +1,7 @@
 requested_operations=996148
 negative_queries=10000000
 uniform_distinct_keys=996148
-zipf_distinct_keys=14061
+zipf_distinct_keys=14065
 zipf_universe=201000000
 zipf_skew=1.5
 seed=42
@@ -10,4 +10,3 @@ cqf_slots=1048576
 cqf_rbits=9
 repeats=3
 hash_modes=default,invertible,none
-delete_mode=full

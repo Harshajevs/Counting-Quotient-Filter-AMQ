@@ -1,0 +1,221 @@
+cqf/src/hashutil.c: In function 'MurmurHash64A':
+cqf/src/hashutil.c:49:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   49 |                 case 7: h ^= (uint64_t)data2[6] << 48;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:50:17: note: here
+   50 |                 case 6: h ^= (uint64_t)data2[5] << 40;
+      |                 ^~~~
+cqf/src/hashutil.c:50:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   50 |                 case 6: h ^= (uint64_t)data2[5] << 40;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:51:17: note: here
+   51 |                 case 5: h ^= (uint64_t)data2[4] << 32;
+      |                 ^~~~
+cqf/src/hashutil.c:51:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   51 |                 case 5: h ^= (uint64_t)data2[4] << 32;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:52:17: note: here
+   52 |                 case 4: h ^= (uint64_t)data2[3] << 24;
+      |                 ^~~~
+cqf/src/hashutil.c:52:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   52 |                 case 4: h ^= (uint64_t)data2[3] << 24;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:53:17: note: here
+   53 |                 case 3: h ^= (uint64_t)data2[2] << 16;
+      |                 ^~~~
+cqf/src/hashutil.c:53:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   53 |                 case 3: h ^= (uint64_t)data2[2] << 16;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:54:17: note: here
+   54 |                 case 2: h ^= (uint64_t)data2[1] << 8;
+      |                 ^~~~
+cqf/src/hashutil.c:54:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   54 |                 case 2: h ^= (uint64_t)data2[1] << 8;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:55:17: note: here
+   55 |                 case 1: h ^= (uint64_t)data2[0];
+      |                 ^~~~
+cqf/src/hashutil.c: In function 'MurmurHash64B':
+cqf/src/hashutil.c:102:28: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  102 |                 case 3: h2 ^= ((unsigned char*)data)[2] << 16;
+      |                         ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:103:17: note: here
+  103 |                 case 2: h2 ^= ((unsigned char*)data)[1] << 8;
+      |                 ^~~~
+cqf/src/hashutil.c:103:28: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  103 |                 case 2: h2 ^= ((unsigned char*)data)[1] << 8;
+      |                         ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:104:17: note: here
+  104 |                 case 1: h2 ^= ((unsigned char*)data)[0];
+      |                 ^~~~
+cuckoo/src/hashutil.cc: In static member function 'static uint32_t cuckoofilter::HashUtil::BobHash(const void*, size_t, uint32_t)':
+cuckoo/src/hashutil.cc:276:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  276 |         c += ((uint32_t)k[11]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:277:7: note: here
+  277 |       case 11:
+      |       ^~~~
+cuckoo/src/hashutil.cc:278:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  278 |         c += ((uint32_t)k[10]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:279:7: note: here
+  279 |       case 10:
+      |       ^~~~
+cuckoo/src/hashutil.cc:280:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  280 |         c += ((uint32_t)k[9]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:281:7: note: here
+  281 |       case 9:
+      |       ^~~~
+cuckoo/src/hashutil.cc:282:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  282 |         c += k[8];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:283:7: note: here
+  283 |       case 8:
+      |       ^~~~
+cuckoo/src/hashutil.cc:284:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  284 |         b += ((uint32_t)k[7]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:285:7: note: here
+  285 |       case 7:
+      |       ^~~~
+cuckoo/src/hashutil.cc:286:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  286 |         b += ((uint32_t)k[6]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:287:7: note: here
+  287 |       case 6:
+      |       ^~~~
+cuckoo/src/hashutil.cc:288:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  288 |         b += ((uint32_t)k[5]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:289:7: note: here
+  289 |       case 5:
+      |       ^~~~
+cuckoo/src/hashutil.cc:290:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  290 |         b += k[4];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:291:7: note: here
+  291 |       case 4:
+      |       ^~~~
+cuckoo/src/hashutil.cc:292:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  292 |         a += ((uint32_t)k[3]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:293:7: note: here
+  293 |       case 3:
+      |       ^~~~
+cuckoo/src/hashutil.cc:294:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  294 |         a += ((uint32_t)k[2]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:295:7: note: here
+  295 |       case 2:
+      |       ^~~~
+cuckoo/src/hashutil.cc:296:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  296 |         a += ((uint32_t)k[1]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:297:7: note: here
+  297 |       case 1:
+      |       ^~~~
+cuckoo/src/hashutil.cc: In static member function 'static void cuckoofilter::HashUtil::BobHash(const void*, size_t, uint32_t*, uint32_t*)':
+cuckoo/src/hashutil.cc:543:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  543 |         c += ((uint32_t)k[11]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:544:7: note: here
+  544 |       case 11:
+      |       ^~~~
+cuckoo/src/hashutil.cc:545:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  545 |         c += ((uint32_t)k[10]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:546:7: note: here
+  546 |       case 10:
+      |       ^~~~
+cuckoo/src/hashutil.cc:547:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  547 |         c += ((uint32_t)k[9]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:548:7: note: here
+  548 |       case 9:
+      |       ^~~~
+cuckoo/src/hashutil.cc:549:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  549 |         c += k[8];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:550:7: note: here
+  550 |       case 8:
+      |       ^~~~
+cuckoo/src/hashutil.cc:551:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  551 |         b += ((uint32_t)k[7]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:552:7: note: here
+  552 |       case 7:
+      |       ^~~~
+cuckoo/src/hashutil.cc:553:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  553 |         b += ((uint32_t)k[6]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:554:7: note: here
+  554 |       case 6:
+      |       ^~~~
+cuckoo/src/hashutil.cc:555:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  555 |         b += ((uint32_t)k[5]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:556:7: note: here
+  556 |       case 5:
+      |       ^~~~
+cuckoo/src/hashutil.cc:557:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  557 |         b += k[4];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:558:7: note: here
+  558 |       case 4:
+      |       ^~~~
+cuckoo/src/hashutil.cc:559:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  559 |         a += ((uint32_t)k[3]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:560:7: note: here
+  560 |       case 3:
+      |       ^~~~
+cuckoo/src/hashutil.cc:561:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  561 |         a += ((uint32_t)k[2]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:562:7: note: here
+  562 |       case 2:
+      |       ^~~~
+cuckoo/src/hashutil.cc:563:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  563 |         a += ((uint32_t)k[1]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:564:7: note: here
+  564 |       case 1:
+      |       ^~~~
+cuckoo/src/hashutil.cc: In static member function 'static uint32_t cuckoofilter::HashUtil::MurmurHash(const void*, size_t, uint32_t)':
+cuckoo/src/hashutil.cc:625:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  625 |       h ^= data[2] << 16;
+      |       ~~^~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:626:5: note: here
+  626 |     case 2:
+      |     ^~~~
+cuckoo/src/hashutil.cc:627:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  627 |       h ^= data[1] << 8;
+      |       ~~^~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:628:5: note: here
+  628 |     case 1:
+      |     ^~~~
+== CQF counting/deletion regression test ==
+[test_cqf_counting] PASS
+== Additional filter regression tests ==
+All additional-filter unit tests passed.
+Negative sample FPs: XOR=41 BinaryFuse=52 BlockedBloom=20
+Blocked Bloom bytes=38976 Counting Bloom bytes~=129947 XOR bytes=27679 Binary Fuse bytes=27648
+== Data-generator regression test ==
+[test_data_generator] PASS
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.024s
+
+OK
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.011s
+
+OK
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.400s
+
+OK
+All functional regression tests passed.

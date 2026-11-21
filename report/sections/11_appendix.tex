@@ -1,0 +1,107 @@
+\section{Reproducibility and Artifact Guide}
+\label{app:repro}
+The Overleaf package contains all figures, generated tables and the CSVs behind this report. The separate code package includes source, tests, archived outputs, the new raw measurements and the asset generator. Large binary workload files and compiled executables are omitted. Their manifest parameters, exact cardinality checks and SHA-256 hashes are retained under \texttt{results/report/} and copied into the LaTeX project's \texttt{reproducibility/} directory.
+
+\begin{table}[!htbp]\centering\small
+\caption{Evidence map for the report. Prefixes refer to files in \texttt{data/} in this LaTeX package and to the corresponding \texttt{results/} files in the code package.}
+\begin{tabular}{L{4.0cm}L{8.7cm}}\toprule
+\textbf{Experiment}&\textbf{Raw / configuration evidence}\\\midrule
+Seven-filter 1M and 67M&\texttt{paper\_scale\_report\_*\_raw.csv}, \texttt{additional\_filters\_report\_*\_raw.csv}, combined \texttt{all\_filters\_report\_*} and configuration files\\
+Hash modes&\texttt{hash\_modes\_report\_control\_raw.csv} and \texttt{hash\_modes\_report\_67m\_raw.csv}\\
+Compact CQF and geometry&\texttt{compact\_zipf\_raw.csv}; \texttt{geometry\_control\_raw.csv}\\
+Target sweep&Tags \texttt{report\_67m\_256} and \texttt{report\_67m\_1024}\\
+Earlier report / archive&\texttt{archived\_bench.csv}; \texttt{archived\_paper\_scale\_1\_512.csv}\\
+Audit and environment&\texttt{manifest\_*.txt}, \texttt{audit\_*.json}, \texttt{environment.txt}, \texttt{source\_manifest.json}, test/run logs\\\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Execution.} On Apple Silicon, create an \texttt{linux/amd64} Ubuntu 22.04 container and mount the extracted code folder at \texttt{/amq-benchmark}. Install the following dependencies inside the container, then run the experiment script from that folder:
+\begin{lstlisting}[language=bash]
+apt-get update
+apt-get install -y build-essential libssl-dev python3 \
+  python3-numpy python3-pandas python3-matplotlib time
+cd /amq-benchmark
+chmod +x scripts/*.sh
+./scripts/run_report_experiments.sh
+\end{lstlisting}
+The script verifies functional tests, audits generated input files outside timing, runs the complete matrix, and validates supplementary completion before writing \texttt{COMPLETED.txt}. Changing library versions may change the realized Zipf stream, so compare audited hashes and cardinalities as well as the seed. Cuckoo's unrecorded per-process hash coefficients mean its exact FPR is not deterministically reproduced by the fixed workload alone.
+
+\textbf{Plot and table generation.} From the code root, run the asset generator on the result files to regenerate vector figures, CSV summaries and numeric LaTeX macros. The supplied Overleaf ZIP already contains the generated assets; compiling it needs neither Python nor benchmark execution.
+\begin{lstlisting}[language=bash]
+python3 scripts/make_research_assets.py --out /path/to/latex-project
+# In Overleaf: main.tex; pdfLaTeX; BibTeX handled automatically.
+\end{lstlisting}
+
+\textbf{Run integrity.} For complete dynamic rows, insertion and positive-recognition counts equal $N$. CQF and Counting Bloom deletion success counts equal $N$ in their full-delete experiments. Static rows recognize all $N$ positive queries after construction from $D$ distinct members. Cuckoo's incomplete skewed rows retain only the accepted count for comparison. The new workload audit and supplementary-run checks include regression tests for deliberate invalid inputs.
+
+\textbf{Package scope.} The source ZIP is a local, audited extension of the supplied archive. No GitHub push or PR is implied. The restored upstream CQF and Cuckoo licenses remain in their source directories; local implementation and interpretation changes are recorded in \texttt{docs/REPORT\_AUDIT.md}.
+\clearpage
+
+\section{Complete Small-Scale and Hash Timing Tables}
+\begin{table}[!htbp]\centering\small
+\caption{New 1M-operation seven-filter results. Throughput means are in M/s; final footprint is in decimal MB. Dynamic insertions are measured over $N$ operations. Static build rates, shown in the build column only, use $D$ distinct keys and exclude preparation. Unsupported and incomplete-workload rates are dashes; the skewed Cuckoo row accepts only 24 operations. Full raw repetitions remain in the data files.}
+\label{tab:small-full}
+\input{tables/small_full.tex}
+\end{table}
+
+\begin{table}[!htbp]\centering\small
+\caption{CQF hash study: mean throughput in M/s. The 996k control includes deletion; 67M deletion is omitted by design. Both use three timing repetitions and 10M negatives.}
+\label{tab:hash-full}
+\input{tables/hash_full.tex}
+\end{table}
+
+\textbf{Aggregation convention.} The report recomputes mean rates from raw repetitions. Some legacy CSV-derived rates instead divide operation count by the mean duration; these two summaries need not be identical.
+
+\textbf{Uncertainty convention.} In all plots, timing whiskers are descriptive sample SD unless stated otherwise. For $z=1.96$, the first-run Wilson FPR interval has centre and half-width
+\[
+ c=\frac{\hat p+z^2/(2Q)}{1+z^2/Q},\qquad
+ w=\frac{z}{1+z^2/Q}\sqrt{\frac{\hat p(1-\hat p)}{Q}+\frac{z^2}{4Q^2}}.
+\]
+It describes random query sampling for the fixed filter realization and query distribution; it does not cover all input distributions or all possible hash seeds.
+At tiny rates, a few positive answers change the observed ratio appreciably. With zero false positives in 10M queries, the 95\% Wilson upper endpoint would still be approximately $3.84\times10^{-7}$. Zero observations would not establish zero probability, and repeating the same negative stream would not make that bound three times tighter.
+\clearpage
+\section{Hash Mapping Details}
+\label{app:hash-details}
+This appendix makes all three key mappings inspectable, including the external mixer in full. They describe the imported hash functions as used by this driver; they are not new algorithms or standalone hash-performance measurements.
+
+\subsection{Default: MurmurHash64A on one 64-bit key}
+For an eight-byte key $x$ and seed zero, the reference implementation uses $m=\mathtt{0xc6a4a7935bd1e995}$ and shift 47. All arithmetic in this description is unsigned modulo $2^{64}$. It initializes $h=8m$ and applies
+\[
+ k_1=xm,\quad k_2=k_1\oplus(k_1\gg47),\quad k_3=k_2m,
+ \qquad h\leftarrow(h\oplus k_3)m.
+\]
+There is no remaining byte tail for an eight-byte input. Finalization is
+\[
+ h\leftarrow h\oplus(h\gg47),\qquad h\leftarrow hm,\qquad
+ h\leftarrow h\oplus(h\gg47).
+\]
+The CQF then reduces the result to its configured range. In this experiment the range is $2^p$, with $p=q+r$. The source function is \texttt{MurmurHash64A} in \texttt{cqf/src/hashutil.c}; the call and range reduction are in the public CQF operations in \texttt{cqf/src/gqf.c}.
+
+\subsection{Invertible: a width-limited integer permutation}
+The imported \texttt{hash\_64} function applies the following operations with $M=2^p-1$:
+\begin{lstlisting}[language=C]
+x = (~x + (x << 21)) & M;
+x = x ^ (x >> 24);
+x = ((x + (x << 3)) + (x << 8)) & M; /* multiply by 265 */
+x = x ^ (x >> 14);
+x = ((x + (x << 2)) + (x << 4)) & M; /* multiply by 21 */
+x = x ^ (x >> 28);
+x = (x + (x << 31)) & M;
+\end{lstlisting}
+Odd multiplications and reversible shift/XOR operations give a permutation within the configured domain. The first masked step discards information from a wider original key. Two original inputs with the same low $p$ bits therefore cannot be distinguished by this path. An invertible mapping of fingerprints is not an injective mapping of our wider original-key universe.
+
+\subsection{External mapping and the timed path}
+The external mapping uses the familiar SplitMix64-style finalization sequence, related to the mixer used in SplitMix~\cite{steele2014}. With unsigned arithmetic modulo $2^{64}$, our code computes:
+\begin{lstlisting}[language=C,caption={External mapping used by the driver. This is a deterministic non-cryptographic mixer, not a new algorithm.},label={lst:splitmix}]
+uint64_t splitmix64(uint64_t x) {
+    x += 0x9e3779b97f4a7c15ULL;
+    x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    x = (x ^ (x >> 27)) * 0x94d049bb133111ebULL;
+    return x ^ (x >> 31);
+}
+key = splitmix64(original_key) & ((1ULL << p) - 1);
+/* qf_insert / qf_count_key_value / qf_remove then use key. */
+\end{lstlisting}
+The mixed fingerprint is passed to \texttt{QF\_HASH\_NONE}. This computation is repeated inside each timed operation; the generator's own rank mixing is shared preprocessing and does not replace the candidate mapping in the loop. The default path additionally includes runtime reduction by a 128-bit range, whereas the external path masks directly. We therefore compare complete hash-and-CQF paths, without claiming standalone mixer latency or adversarial collision guarantees.
+
+\textbf{Consistency across updates.} The same mode, seed, mixer and width must be used for insertion, lookup and deletion within a filter instance. Changing the mapping after construction would ask the structure about different fingerprints and could create apparent false negatives. The driver therefore selects the mode before replaying a workload and keeps it fixed through all supported phases. A practical hash-path optimization is a configuration decision made before construction; it is not an interchangeable query-time switch for an existing table.

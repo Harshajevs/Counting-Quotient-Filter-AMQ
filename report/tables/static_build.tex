@@ -1,0 +1,10 @@
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+\textbf{Input} & \textbf{Filter} & \textbf{Prep (s)} & \textbf{Build (s)} & \textbf{Build (M keys/s)} & \textbf{Total (M ops/s)} \\
+\midrule
+Uniform & XOR & 0.447 & 16.640 & 4.09 & 3.99 \\
+Uniform & Fuse-style & 0.447 & 10.878 & 6.44 & 6.20 \\
+Zipfian & XOR & 2.139 & 0.012 & 18.98 & 31.41 \\
+Zipfian & Fuse-style & 2.139 & 0.011 & 20.57 & 31.42 \\
+\bottomrule
+\end{tabular}

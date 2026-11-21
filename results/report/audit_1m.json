@@ -1,0 +1,20 @@
+{
+  "uniform": {
+    "positive_count": 1000000,
+    "distinct_keys": 1000000,
+    "max_frequency": 1,
+    "negative_count": 10000000,
+    "positive_sha256": "1facad686a0c552ffed91bb6ed19aeff2211ee5a38c6654e9eedcd1e2a01e966",
+    "negative_sha256": "21096e917336b3cf01404436d7e7741df1a5c4c83270ae7f2751c61740a9bc99",
+    "negative_overlap": 0
+  },
+  "zipfian": {
+    "positive_count": 1000000,
+    "distinct_keys": 14105,
+    "max_frequency": 383350,
+    "negative_count": 10000000,
+    "positive_sha256": "f60cd3fecc689ff3ccb98601e2176e6fc5741af4827e9a19f5d5b6099119d9a3",
+    "negative_sha256": "95c367be6d7b1a49f52191ee6ca3bfab10af106f97ec5912115fc95573b6bd8c",
+    "negative_overlap": 0
+  }
+}

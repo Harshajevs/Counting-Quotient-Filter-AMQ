@@ -1,0 +1,4 @@
+Supplied archive: amq-benchmark-seven-filter-phase3.zip
+SHA256=268a313ec482362ab6a6c212fadc5367f6293d9cd1a5aa3263a1b6fba0944a55
+GitHub head fe184baa6933d7ac3bf3fc18bf2a2245c8b73e00 checked 21 November 2026 IST; no public PR entries returned. ZIP includes seven-filter extensions absent in that head.
+Prior report: CQF.pdf, four pages including cover.

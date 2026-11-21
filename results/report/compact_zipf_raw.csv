@@ -1,0 +1,2 @@
+filter,distribution,n_requested,n_inserted,config_param,memory_bytes,insert_time_s,insert_ops_sec,query_pos_time_s,query_pos_ops_sec,found_positive,query_neg_time_s,query_neg_ops_sec,measured_fp_rate,theoretical_fp_rate,fp_ratio,delete_time_s,delete_ops_sec,deleted_ok
+cqf,zipfian,67000000,67000000,qbits=19;rbits=9;hash=default,739234,15.252755,4392649.10,3.887135,17236345.75,67000000,0.333369,29996782.88,0.0008755,0.000853519886732,1.0257523,27.090768,2473167.22,67000000

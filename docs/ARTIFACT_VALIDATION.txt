@@ -1,0 +1,15 @@
+FINAL ARTIFACT VALIDATION — 21 November 2026 IST
+
+Functional regression suite: passed (CQF counts/deletions, added filters,
+workload generator, exact workload audit, supplementary completion validation,
+and unsupported-operation masking).
+All shell scripts: bash -n passed.
+Unified-result checks: report_1m and report_67m passed at three repetitions;
+report_67m_256 and report_67m_1024 passed at one repetition.
+Supplementary CQF checks: compact 67M skew run completed all deletions; six
+matched-N geometry rows completed all requested insertions/positive queries.
+Final source manifest: 59 packaged source files, all SHA-256 hashes verified.
+
+Cuckoo's duplicate-heavy capacity failure remains an explicitly labelled result.
+All rates describe the recorded translated linux/amd64 environment on Apple M2.
+Large generated workloads and compiled binaries are omitted from both ZIPs.

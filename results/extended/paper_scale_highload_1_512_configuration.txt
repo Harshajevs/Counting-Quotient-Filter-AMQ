@@ -1,7 +1,7 @@
 requested_operations=63753420
 negative_queries=10000000
 uniform_distinct_keys=63753420
-zipf_distinct_keys=221675
+zipf_distinct_keys=221699
 zipf_universe=201000000
 zipf_skew=1.5
 target_fpr=1/512
@@ -9,7 +9,7 @@ cqf_qbits=26
 cqf_slots=67108864
 cqf_rbits=9
 cqf_uniform_distinct_load=0.94999999
-cqf_zipf_distinct_load=0.00330321
+cqf_zipf_distinct_load=0.00330357
 cuckoo_fingerprint_bits=12
 bloom_bits=827790686
 bloom_hash_functions=9

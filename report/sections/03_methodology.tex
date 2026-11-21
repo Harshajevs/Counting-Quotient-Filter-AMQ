@@ -1,0 +1,68 @@
+\section{Experimental Methodology}
+\subsection{Workloads and exact checks}
+We generate one positive stream and one negative-query stream per distribution, then reuse them across filters. Workload generation, file loading and correctness checks are outside the timed filter batches. The primary experiments use $N=1{,}000{,}000$ and $N=67{,}000{,}000$, with $Q=10{,}000{,}000$ negative queries per distribution. Seed 42 fixes the input generator. Binary files store little-endian \texttt{uint64} values.
+
+The uniform positive generator draws from $[1,2^{63})$; the negative generator draws from $[1,2^{64}-1)$. Thus ``64-bit keys'' describes their representation, not a full-width uniform positive distribution. The new audit sorts the positive stream, verifies $D$ exactly, checks every negative query against that stream, and records file hashes. Every reported primary workload passed with zero overlap. The stored-input restriction matters when interpreting the width-limited invertible hash.
+
+The skewed stream samples ranks from a Zipf distribution of exponent 1.5, rejecting ranks above 201,000,000. Ranks are mapped to stable mixed integer keys. It shares the reference paper's stated skew parameter and universe size, but is not its original dataset. Generator versions and sampling details can change realized cardinality: we therefore report measured $D$, rather than assuming identical streams across project phases.
+
+\begin{table}[!htbp]\centering
+\caption{Audited workloads in the new primary experiments. Both scales use 10M negative queries; each complete primary configuration has three timing repetitions.}
+\label{tab:workloads}
+\input{tables/workloads.tex}
+\end{table}
+
+\subsection{Sizing and error targets}
+In the primary seven-filter experiments, at nominal target $\delta$, the CQF uses
+\begin{equation}
+q=\left\lceil\log_2(N/0.95)\right\rceil,\qquad r=\lceil-\log_2\delta\rceil,\qquad S=2^q.
+\label{eq:cqf-sizing}
+\end{equation}
+This deliberately conservative rule sizes CQF from operations, including the counter workload. We report distinct load $D/S$ separately from occupied-slot load, since counter encodings and fingerprint collisions make them different quantities. Cuckoo is also allocated from $N$. At $\delta=1/512$ it uses 12-bit fingerprints and four-way buckets.
+
+Bloom, Counting Bloom, Blocked Bloom and the static filters are sized from exact $D$. This gives them offline cardinality knowledge. It is appropriate for a controlled membership comparison, but it is not a test of unknown-cardinality streaming allocation. For Bloom-family sizing, an integer $k$ is chosen near the optimum and
+\begin{equation}
+m=\left\lceil\frac{-kD}{\ln(1-\delta^{1/k})}\right\rceil,\qquad
+p_{\mathrm{Bloom}}\approx(1-e^{-kD/m})^k.
+\label{eq:bloom}
+\end{equation}
+Counting Bloom uses the same number of cells, with four bits per cell before overflow overhead. Blocked Bloom allocates approximately $1.2m$ bits. XOR uses $f=\lceil-\log_2\delta\rceil$ fingerprint bits. The Fuse-style implementation adds one guard bit, so at the primary target its nominal FPR is $1/1024$, rather than $1/512$.
+
+\begin{table}[!htbp]\centering\small
+\caption{Primary CQF geometry at $r=9$. The earlier baseline and the exactly 1M configuration fall on different sides of a power-of-two boundary.}
+\label{tab:geometry}
+\begin{tabular}{lrrr}\toprule
+\textbf{Configuration}&\textbf{Operations}&\textbf{Slots}&\textbf{Uniform distinct load}\\\midrule
+Earlier baseline&996,148&$2^{20}$&95.00\%\\
+New small-scale run&1,000,000&$2^{21}$&47.68\%\\
+New large-scale run&67,000,000&$2^{27}$&49.92\%\\
+Geometry sensitivity&63,753,420&$2^{26}$ or $2^{27}$&95.00\% or 47.50\%\\\bottomrule
+\end{tabular}
+\end{table}
+The large skewed stream has about 292 operations per distinct key on average, and its hottest key accounts for 38.28\% of all operations. This is a stress test of multiplicity rather than simply a smaller set. It also creates a strong contrast between frequency-weighted successful queries and uniformly sampled misses. Auditing both cardinality and maximum frequency makes that contrast explicit: a seed alone would not establish that two generated workloads have the same duplicate pressure or that a negative-query file contains no true member.
+\clearpage
+
+\subsection{Operations, timing and validation}
+Each dynamic filter receives the complete positive stream in order. Dynamic allocation and zero-initialization precede the online insertion timer; static graph allocations are included in build time. Insertion is a batch from empty to final load; queries follow that batch. CQF membership uses \texttt{qf\_count\_key\_value}$>0$, including count retrieval. Positive queries replay the inserted stream, so duplicate-heavy positive lookup rates are frequency-weighted. Negative queries are uniform independent draws, conditioned on absence; they are not Zipf-weighted misses. CQF and Counting Bloom delete one known inserted occurrence at a time. CQF's post-delete check confirms that represented counts return to zero. Regression tests also exercise repeated-key decrements and Counting Bloom overflow.
+
+Cuckoo insertion stops on failure. If it accepts only a prefix, the unified result records its accepted count and marks its throughput, query timing, deletion timing and FPR unavailable for full-workload comparison. A fast query over 24 accepted operations would answer a different question from querying a completed 67M-operation workload.
+
+For static filters, preparation copies the input and deduplicates the skewed stream by sorting. Uniform input is already distinct, as verified by the audit. Build time starts with the distinct set ready and includes construction retries. We report preparation, build-only time and their sum. This end-to-end construction cost begins with loaded input and excludes file I/O, as do the online-operation timings. Static positive queries still use the complete original stream. Build-only rates divide $D$ by construction time; end-to-end rates normalized by $N$ are labelled explicitly and are not online insertion rates.
+
+For operation count $C$ and batch duration $t_j$, repetition $j$ gives $T_j=C/t_j$. Tables report the mean throughput with sample standard deviation where repeated data exist. Average batch cost is $10^9\overline{t}/C$ nanoseconds per operation. It is not a percentile latency, and it is not generally the reciprocal of $\overline{T}$. Three repetitions measure run variability; they are not enough to establish platform-independent rankings. Execution order is fixed, without CPU pinning or randomized interleaving.
+
+The primary new runs use Ubuntu 22.04.5, GCC/G++ 11.4.0 and \texttt{-O3}. The host is an Apple M2 Mac with 8\,GB RAM; Docker provides about 4\,GB to the Linux VM. The executables are \texttt{linux/amd64}, translated by Rosetta. Guest CPUID reports are virtual and are not physical Intel cache specifications. The benchmark is single-threaded. Exact build commands, environment output and source hashes accompany the data.
+
+\subsection{Accuracy uncertainty and memory accounting}
+Measured false-positive rate is $\hat p=X/Q$, where $X$ counts positive answers to absent keys. The same negative stream is reused across timing repetitions. For fixed filter hashes it supplies one accuracy sample, not $3Q$ independent queries. Cuckoo's upstream multiply-shift coefficients come from \texttt{std::random\_device} in each process; its repetitions include hash-realization variation, and those coefficients are not recorded by the historical driver. Accuracy plots show the first-run rate and its 95\% Wilson interval; separate repeat summaries preserve the Cuckoo range.
+
+CQF's random-collision estimate is
+\begin{equation}
+p_{\mathrm{CQF}}\approx\frac{D}{2^{q+r}}=\frac{D}{S}\,2^{-r}.
+\label{eq:cqf-fpr}
+\end{equation}
+It is an approximation under well-mixed hashing, not a guarantee for every deterministic input. For Cuckoo, the legacy CSV records the full-bucket approximation $8/2^f$. We retain it as a conservative reference value here, rather than a load-adjusted prediction or an input-independent guarantee; the expected rate at partial occupancy is lower. XOR and Fuse-style nominal rates are $2^{-f}$. Blocked Bloom uses the mean of $(b_i/512)^k$ across blocks, where $b_i$ is the number of set bits in block $i$; this is an occupancy-conditioned estimate, not an exact theorem for the implemented hashes.
+
+Memory means the driver-reported final table or packed-array footprint, plus the Counting Bloom map's estimated node/bucket allowance. It excludes input arrays, preparation copies, static graph workspaces and most allocator or fixed-object overhead. We use decimal MB ($10^6$ bytes). Process peak RSS and construction peak memory are not measured; static filters can need much more working memory than their final footprint.
+\finding{Nominally equal error targets do not imply equal achieved FPR, equal load, equal memory budgets or equal operation support. We report those differences alongside performance.}
+\clearpage

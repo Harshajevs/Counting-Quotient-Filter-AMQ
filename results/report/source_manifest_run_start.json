@@ -1,0 +1,222 @@
+[
+  {
+    "path": "bloom/bench_bloom.cc",
+    "sha256": "91adc88a172303ee390875883befd729e471c754022d65e41fb08562a0a83cde"
+  },
+  {
+    "path": "bloom/bloom_filter.hpp",
+    "sha256": "fc948c1adfaa92f3767c7c373c207401c69153c42460e8ff646ddb2a4d7b03b1"
+  },
+  {
+    "path": "cqf/bench_cqf.c",
+    "sha256": "83217adfb4ae3842a4978af918f63644c654ba8d662573b745a9245339425186"
+  },
+  {
+    "path": "cqf/include/gqf.h",
+    "sha256": "9bc37f635fdf1a98a28c0d21b38081cfe15168b3b8dcd65df105cb23d76b1309"
+  },
+  {
+    "path": "cqf/include/gqf_file.h",
+    "sha256": "4ead4831e3a5b9eff301f339f30de3b05a45260740c5601fbd1f760dcfa29597"
+  },
+  {
+    "path": "cqf/include/gqf_int.h",
+    "sha256": "aaec844f525efd3d566ee5ffb6a0a2c87f4028a44dc7e041357f418637535956"
+  },
+  {
+    "path": "cqf/include/gqf_wrapper.h",
+    "sha256": "6b912eecc66ee04971f09ccc56f6d49f8e89b9d6afd5a1200539cf2f35e7ca0c"
+  },
+  {
+    "path": "cqf/include/hashutil.h",
+    "sha256": "291d4de9744ad796fbe9e32dcc06c0b0cf9454e05df3d767f6651e25d1c7b59d"
+  },
+  {
+    "path": "cqf/include/partitioned_counter.h",
+    "sha256": "545269bd2a3055f9cbbffa584175f4fcc8e0255e0c431c2b23e161810df4d9e4"
+  },
+  {
+    "path": "cqf/include/zipf.h",
+    "sha256": "1a827baf1f6c70039f5489578c1cab2587c199873c9b40bce1e080e8d9827f22"
+  },
+  {
+    "path": "cqf/src/gqf.c",
+    "sha256": "df1bdf10002fe30e046b78c3988a7be6292039809d4019c602431fcebee7a4a4"
+  },
+  {
+    "path": "cqf/src/gqf_file.c",
+    "sha256": "34a2460b01e4fe922f166a4efac448495826889c1e432caf2218d97a78e0ad14"
+  },
+  {
+    "path": "cqf/src/hashutil.c",
+    "sha256": "152e4f09fe04f46fa062a4a978cefa677f559fb83f61337f87b73cc2dc729dc8"
+  },
+  {
+    "path": "cqf/src/partitioned_counter.c",
+    "sha256": "e716b581d028eff9535ee9497be2dd20e0da75b0aebbb5393ed7ddd9afcea839"
+  },
+  {
+    "path": "cqf/src/zipf.c",
+    "sha256": "088a215d917c540d8fc62c53537491386852da35aab91dfdd451e84b8140fb3c"
+  },
+  {
+    "path": "cuckoo/bench_cuckoo.cc",
+    "sha256": "1c6c0d7b8ee6f2a9c0398212660791417be5259acdf73226cf6de361280787cc"
+  },
+  {
+    "path": "cuckoo/src/bitsutil.h",
+    "sha256": "6501b537e1496b7f32dc56640b011ee569e27a381010e44b5e08eaa6da5a74e8"
+  },
+  {
+    "path": "cuckoo/src/cuckoofilter.h",
+    "sha256": "2cdd87328a1b72f1e8a87e35097b61b303734d2a9f809127dfdb0ee12cbe22eb"
+  },
+  {
+    "path": "cuckoo/src/debug.h",
+    "sha256": "f6cec9ec4fd813f5eb6200aafeffaad9903f60086b88a8bb5c26489c07ecf94d"
+  },
+  {
+    "path": "cuckoo/src/hashutil.cc",
+    "sha256": "46452944e5d7bbbcfbf531f5a6b5709806fc739fc8ba6e2837a4f372aee9120a"
+  },
+  {
+    "path": "cuckoo/src/hashutil.h",
+    "sha256": "3371cd213be9bfcb0950c62723c98d36481e3371694f887c37b22643c998eb5c"
+  },
+  {
+    "path": "cuckoo/src/packedtable.h",
+    "sha256": "c9e777ab2cec35eef7bf106e4a1d846062ce5d4427682f57f89fe7092025e63c"
+  },
+  {
+    "path": "cuckoo/src/permencoding.h",
+    "sha256": "619001eca4b1ced80c4913fe405de21cbd20c3ec943cc6ea4d829757b09e5e98"
+  },
+  {
+    "path": "cuckoo/src/printutil.h",
+    "sha256": "3696b5999604b7e18d9fa36432574633f8cba9fa5a3a7caafdc8e08e419acc83"
+  },
+  {
+    "path": "cuckoo/src/simd-block.h",
+    "sha256": "d2fdd8fd12b27531da8c3df91123e629f2c22c43e74b4320d55fb6b466e8557b"
+  },
+  {
+    "path": "cuckoo/src/singletable.h",
+    "sha256": "326a0b986f99b1bbeb343dd56903d7065345aaee817c42760d8280d0265a6b4e"
+  },
+  {
+    "path": "data/generate_data.py",
+    "sha256": "fdf1a7b698d326050a47e8d474f8b76b5262577f29fe9a80e2e9bb3413884ce2"
+  },
+  {
+    "path": "filters/amq_extra.hpp",
+    "sha256": "a195a88057f7bd41ce3c52ec3276d9f9afa429ecd4db56d3088b9be32c869055"
+  },
+  {
+    "path": "filters/bench_extra_filters.cpp",
+    "sha256": "05d7c6b270363920083f605b0ae48acbb27089ecc432f11373edb2a201fd526f"
+  },
+  {
+    "path": "scripts/aggregate_extra_filters.py",
+    "sha256": "9c80bdec2fda28751e14407c715e19520576f9d9d69adce3bff516a738b15429"
+  },
+  {
+    "path": "scripts/aggregate_results.py",
+    "sha256": "9f640d73a245d8a9a979e298fd375f8b886265616b6257fc2da2d01d3139338a"
+  },
+  {
+    "path": "scripts/audit_workloads.py",
+    "sha256": "82a9139c6f674bbefef159b004ef6657efb0b3ad80e5f51a4c506814c49512a8"
+  },
+  {
+    "path": "scripts/build_all.sh",
+    "sha256": "87828ae20efd7754031244669c494864f22b965ff0c00678ce5d628ba828877d"
+  },
+  {
+    "path": "scripts/merge_all_filters.py",
+    "sha256": "b4bdf600a839b13d82ed3770d1c24f15df035f04afc841062df9f6a5a0c972d2"
+  },
+  {
+    "path": "scripts/plot_all_filters.py",
+    "sha256": "07ea61415278af046e2368f21607e0cb6169cd6ea8da5f7bb6dfe264c62b714d"
+  },
+  {
+    "path": "scripts/plot_extended.py",
+    "sha256": "957ffce5ebbeb9ae6629ff1422c7aac7a740d6c6646973d8a64c64fd6077b2c4"
+  },
+  {
+    "path": "scripts/plot_fpr_sweep.py",
+    "sha256": "9079767174eb4b15c63ecf5743cf4befd25103d502ab39e38a3a2e62e6ca1c5f"
+  },
+  {
+    "path": "scripts/plot_hash_modes.py",
+    "sha256": "9060e8323b65c8ee7a058c3759e7ed450db63c26003d032dd83b3fa864549b3e"
+  },
+  {
+    "path": "scripts/plot_hash_scale_comparison.py",
+    "sha256": "15b43e1e84da81b203433efd5f6f37911332cef5b4827ec20b07634f76bd4605"
+  },
+  {
+    "path": "scripts/plot_load_factor_comparison.py",
+    "sha256": "80acb245148dbdd013c9522d5bd19a39ab5a7ce28054d02614748e0e959906b9"
+  },
+  {
+    "path": "scripts/plot_results.py",
+    "sha256": "407c1dcaf0d49b9450050bd07d5eca65e470f629f10aca3557f4cf7f4fb3377e"
+  },
+  {
+    "path": "scripts/plot_scale_comparison.py",
+    "sha256": "1c724614467cc780da047d31c298a298a1020e868e13229af72d96b3cace6473"
+  },
+  {
+    "path": "scripts/run_all.sh",
+    "sha256": "f683ed70b450dcd1a871e1ebcdfa6f3021e39c24b209596f28dc0d1e1e692c30"
+  },
+  {
+    "path": "scripts/run_filter_expansion.sh",
+    "sha256": "a9ebb534b4e02e6ca85a39ba68847718467457e372d5f10e6e6b1e6104744bb4"
+  },
+  {
+    "path": "scripts/run_filter_expansion_sweep.sh",
+    "sha256": "2606dd036b0e6c3c189ad88a7d6610e23a9b16c3ab842803a16007f6801fa9cf"
+  },
+  {
+    "path": "scripts/run_fpr_sweep.sh",
+    "sha256": "46a38c6f49bd2aae111a918626b521e38abfa1392ea9a0fed1a4057e42482412"
+  },
+  {
+    "path": "scripts/run_hash_study.sh",
+    "sha256": "1b9edbbeb2b242fec5431a7872f7b1448568b9274f66f9904406c05b9cee010d"
+  },
+  {
+    "path": "scripts/run_paper_scale.sh",
+    "sha256": "f94d5a321fc016db930439ceda89f4264c33b3463d8f3ec38516ab9bc0b2b1a9"
+  },
+  {
+    "path": "scripts/run_report_experiments.sh",
+    "sha256": "fce6d68b1c78ef5f6626b076a19bf0718f77c5e8c5ef1582e5b3a78ccda4511a"
+  },
+  {
+    "path": "scripts/test_all.sh",
+    "sha256": "57e4e80c6fa9ee0cbce1e5ea97c90e2ae21ba0d683097f17c88308f1e776b0fd"
+  },
+  {
+    "path": "scripts/test_extra_filters.sh",
+    "sha256": "ce9be0b44d592f5f21d8944e0ba0c7b4f41a8af61b7d8c6bbc369bafe17482c7"
+  },
+  {
+    "path": "scripts/verify_all_filters.py",
+    "sha256": "a2dfff0db3e31b5a1d0373a590e97646764a888b393748a20041f600a5ebd81e"
+  },
+  {
+    "path": "tests/test_additional_filters.cpp",
+    "sha256": "d4fedad489d3ac34083a41c5ec10f76e5945b968a1c990e9c86078eba6ea9a94"
+  },
+  {
+    "path": "tests/test_cqf_counting.c",
+    "sha256": "1e044cdf4be8c84e08650432dec492905afd1d65df2760cfee92ae9ea0e4cc8e"
+  },
+  {
+    "path": "tests/test_workload_audit.py",
+    "sha256": "edc7775c13e954d0ca974b9df6beef94c3b6050ca3ff35540a1bf78bc28deb25"
+  }
+]

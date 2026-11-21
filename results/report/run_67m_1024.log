@@ -1,0 +1,325 @@
+== Building CQF benchmark ==
+cqf/src/hashutil.c: In function 'MurmurHash64A':
+cqf/src/hashutil.c:49:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   49 |                 case 7: h ^= (uint64_t)data2[6] << 48;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:50:17: note: here
+   50 |                 case 6: h ^= (uint64_t)data2[5] << 40;
+      |                 ^~~~
+cqf/src/hashutil.c:50:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   50 |                 case 6: h ^= (uint64_t)data2[5] << 40;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:51:17: note: here
+   51 |                 case 5: h ^= (uint64_t)data2[4] << 32;
+      |                 ^~~~
+cqf/src/hashutil.c:51:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   51 |                 case 5: h ^= (uint64_t)data2[4] << 32;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:52:17: note: here
+   52 |                 case 4: h ^= (uint64_t)data2[3] << 24;
+      |                 ^~~~
+cqf/src/hashutil.c:52:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   52 |                 case 4: h ^= (uint64_t)data2[3] << 24;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:53:17: note: here
+   53 |                 case 3: h ^= (uint64_t)data2[2] << 16;
+      |                 ^~~~
+cqf/src/hashutil.c:53:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   53 |                 case 3: h ^= (uint64_t)data2[2] << 16;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:54:17: note: here
+   54 |                 case 2: h ^= (uint64_t)data2[1] << 8;
+      |                 ^~~~
+cqf/src/hashutil.c:54:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   54 |                 case 2: h ^= (uint64_t)data2[1] << 8;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:55:17: note: here
+   55 |                 case 1: h ^= (uint64_t)data2[0];
+      |                 ^~~~
+cqf/src/hashutil.c: In function 'MurmurHash64B':
+cqf/src/hashutil.c:102:28: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  102 |                 case 3: h2 ^= ((unsigned char*)data)[2] << 16;
+      |                         ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:103:17: note: here
+  103 |                 case 2: h2 ^= ((unsigned char*)data)[1] << 8;
+      |                 ^~~~
+cqf/src/hashutil.c:103:28: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  103 |                 case 2: h2 ^= ((unsigned char*)data)[1] << 8;
+      |                         ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:104:17: note: here
+  104 |                 case 1: h2 ^= ((unsigned char*)data)[0];
+      |                 ^~~~
+== Building Cuckoo filter benchmark ==
+cuckoo/src/hashutil.cc: In static member function 'static uint32_t cuckoofilter::HashUtil::BobHash(const void*, size_t, uint32_t)':
+cuckoo/src/hashutil.cc:276:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  276 |         c += ((uint32_t)k[11]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:277:7: note: here
+  277 |       case 11:
+      |       ^~~~
+cuckoo/src/hashutil.cc:278:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  278 |         c += ((uint32_t)k[10]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:279:7: note: here
+  279 |       case 10:
+      |       ^~~~
+cuckoo/src/hashutil.cc:280:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  280 |         c += ((uint32_t)k[9]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:281:7: note: here
+  281 |       case 9:
+      |       ^~~~
+cuckoo/src/hashutil.cc:282:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  282 |         c += k[8];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:283:7: note: here
+  283 |       case 8:
+      |       ^~~~
+cuckoo/src/hashutil.cc:284:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  284 |         b += ((uint32_t)k[7]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:285:7: note: here
+  285 |       case 7:
+      |       ^~~~
+cuckoo/src/hashutil.cc:286:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  286 |         b += ((uint32_t)k[6]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:287:7: note: here
+  287 |       case 6:
+      |       ^~~~
+cuckoo/src/hashutil.cc:288:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  288 |         b += ((uint32_t)k[5]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:289:7: note: here
+  289 |       case 5:
+      |       ^~~~
+cuckoo/src/hashutil.cc:290:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  290 |         b += k[4];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:291:7: note: here
+  291 |       case 4:
+      |       ^~~~
+cuckoo/src/hashutil.cc:292:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  292 |         a += ((uint32_t)k[3]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:293:7: note: here
+  293 |       case 3:
+      |       ^~~~
+cuckoo/src/hashutil.cc:294:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  294 |         a += ((uint32_t)k[2]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:295:7: note: here
+  295 |       case 2:
+      |       ^~~~
+cuckoo/src/hashutil.cc:296:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  296 |         a += ((uint32_t)k[1]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:297:7: note: here
+  297 |       case 1:
+      |       ^~~~
+cuckoo/src/hashutil.cc: In static member function 'static void cuckoofilter::HashUtil::BobHash(const void*, size_t, uint32_t*, uint32_t*)':
+cuckoo/src/hashutil.cc:543:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  543 |         c += ((uint32_t)k[11]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:544:7: note: here
+  544 |       case 11:
+      |       ^~~~
+cuckoo/src/hashutil.cc:545:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  545 |         c += ((uint32_t)k[10]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:546:7: note: here
+  546 |       case 10:
+      |       ^~~~
+cuckoo/src/hashutil.cc:547:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  547 |         c += ((uint32_t)k[9]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:548:7: note: here
+  548 |       case 9:
+      |       ^~~~
+cuckoo/src/hashutil.cc:549:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  549 |         c += k[8];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:550:7: note: here
+  550 |       case 8:
+      |       ^~~~
+cuckoo/src/hashutil.cc:551:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  551 |         b += ((uint32_t)k[7]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:552:7: note: here
+  552 |       case 7:
+      |       ^~~~
+cuckoo/src/hashutil.cc:553:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  553 |         b += ((uint32_t)k[6]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:554:7: note: here
+  554 |       case 6:
+      |       ^~~~
+cuckoo/src/hashutil.cc:555:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  555 |         b += ((uint32_t)k[5]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:556:7: note: here
+  556 |       case 5:
+      |       ^~~~
+cuckoo/src/hashutil.cc:557:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  557 |         b += k[4];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:558:7: note: here
+  558 |       case 4:
+      |       ^~~~
+cuckoo/src/hashutil.cc:559:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  559 |         a += ((uint32_t)k[3]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:560:7: note: here
+  560 |       case 3:
+      |       ^~~~
+cuckoo/src/hashutil.cc:561:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  561 |         a += ((uint32_t)k[2]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:562:7: note: here
+  562 |       case 2:
+      |       ^~~~
+cuckoo/src/hashutil.cc:563:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  563 |         a += ((uint32_t)k[1]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:564:7: note: here
+  564 |       case 1:
+      |       ^~~~
+cuckoo/src/hashutil.cc: In static member function 'static uint32_t cuckoofilter::HashUtil::MurmurHash(const void*, size_t, uint32_t)':
+cuckoo/src/hashutil.cc:625:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  625 |       h ^= data[2] << 16;
+      |       ~~^~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:626:5: note: here
+  626 |     case 2:
+      |     ^~~~
+cuckoo/src/hashutil.cc:627:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  627 |       h ^= data[1] << 8;
+      |       ~~^~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:628:5: note: here
+  628 |     case 1:
+      |     ^~~~
+== Building Bloom filter benchmark ==
+== Building additional AMQ filters (Counting Bloom, Blocked Bloom, XOR, Binary Fuse) ==
+== Build complete ==
+  cqf/bench_cqf
+  cuckoo/bench_cuckoo
+  bloom/bench_bloom
+  filters/bench_extra_filters
+PASS uniform: 67,000,000 operations; 67000000 distinct; no negative overlap
+PASS zipfian: 67,000,000 operations; 229115 distinct; no negative overlap
+== uniform capacity: distinct=67000000; CQF qbits=27 slots=134217728; Bloom m=966605678 k=10 ==
+== Paper-scale uniform repeat 1/1 target=1/1024 ==
+[cqf] loaded 67000000 positive, 10000000 negative keys (qbits=27 rbits=10, mode=default)
+[cqf] table allocation complete (slots=134217728)
+[cqf] inserted 10000000/67000000
+[cqf] inserted 20000000/67000000
+[cqf] inserted 30000000/67000000
+[cqf] inserted 40000000/67000000
+[cqf] inserted 50000000/67000000
+[cqf] inserted 60000000/67000000
+[cqf] insert phase complete: 1.53 Mops/s
+[cqf] geometry: slots=134217728 occupied=67000000 stored_fingerprints=66983887 total_count=67000000
+[cqf] positive lookups 10000000/67000000
+[cqf] positive lookups 20000000/67000000
+[cqf] positive lookups 30000000/67000000
+[cqf] positive lookups 40000000/67000000
+[cqf] positive lookups 50000000/67000000
+[cqf] positive lookups 60000000/67000000
+[cqf] positive lookup phase complete: 9.42 Mops/s
+[cqf] negative lookup phase complete: 13.64 Mops/s
+[cqf] delete progress: 5000000/67000000 occurrences
+[cqf] delete progress: 10000000/67000000 occurrences
+[cqf] delete progress: 15000000/67000000 occurrences
+[cqf] delete progress: 20000000/67000000 occurrences
+[cqf] delete progress: 25000000/67000000 occurrences
+[cqf] delete progress: 30000000/67000000 occurrences
+[cqf] delete progress: 35000000/67000000 occurrences
+[cqf] delete progress: 40000000/67000000 occurrences
+[cqf] delete progress: 45000000/67000000 occurrences
+[cqf] delete progress: 50000000/67000000 occurrences
+[cqf] delete progress: 55000000/67000000 occurrences
+[cqf] delete progress: 60000000/67000000 occurrences
+[cqf] delete progress: 65000000/67000000 occurrences
+[cqf] delete phase complete: 1.48 Mops/s
+[cqf] done: inserted=67000000 found_pos=67000000 measured_fp=0.0004827 theoretical_fp=0.00048748916 deleted_ok=67000000
+[cuckoo] loaded 67000000 positive, 10000000 negative keys (capacity=67000000 bits_per_item=16)
+[cuckoo] done: inserted=67000000 found_pos=67000000 measured_fp=0.000065 theoretical_fp=0.000122 deleted_ok=67000000
+[bloom] loaded 67000000 positive, 10000000 negative keys (size_bits=966605678 k=10)
+[bloom] done: inserted=67000000 found_pos=67000000 false_positives=9826 measured_fp=0.000983 theoretical_fp=0.000977
+== zipfian capacity: distinct=229115; CQF qbits=27 slots=134217728; Bloom m=3305431 k=10 ==
+== Paper-scale zipfian repeat 1/1 target=1/1024 ==
+[cqf] loaded 67000000 positive, 10000000 negative keys (qbits=27 rbits=10, mode=default)
+[cqf] table allocation complete (slots=134217728)
+[cqf] inserted 10000000/67000000
+[cqf] inserted 20000000/67000000
+[cqf] inserted 30000000/67000000
+[cqf] inserted 40000000/67000000
+[cqf] inserted 50000000/67000000
+[cqf] inserted 60000000/67000000
+[cqf] insert phase complete: 4.45 Mops/s
+[cqf] geometry: slots=134217728 occupied=361111 stored_fingerprints=229115 total_count=67000000
+[cqf] positive lookups 10000000/67000000
+[cqf] positive lookups 20000000/67000000
+[cqf] positive lookups 30000000/67000000
+[cqf] positive lookups 40000000/67000000
+[cqf] positive lookups 50000000/67000000
+[cqf] positive lookups 60000000/67000000
+[cqf] positive lookup phase complete: 32.54 Mops/s
+[cqf] negative lookup phase complete: 20.84 Mops/s
+[cqf] delete progress: 5000000/67000000 occurrences
+[cqf] delete progress: 10000000/67000000 occurrences
+[cqf] delete progress: 15000000/67000000 occurrences
+[cqf] delete progress: 20000000/67000000 occurrences
+[cqf] delete progress: 25000000/67000000 occurrences
+[cqf] delete progress: 30000000/67000000 occurrences
+[cqf] delete progress: 35000000/67000000 occurrences
+[cqf] delete progress: 40000000/67000000 occurrences
+[cqf] delete progress: 45000000/67000000 occurrences
+[cqf] delete progress: 50000000/67000000 occurrences
+[cqf] delete progress: 55000000/67000000 occurrences
+[cqf] delete progress: 60000000/67000000 occurrences
+[cqf] delete progress: 65000000/67000000 occurrences
+[cqf] delete phase complete: 2.59 Mops/s
+[cqf] done: inserted=67000000 found_pos=67000000 measured_fp=9e-07 theoretical_fp=1.66703103e-06 deleted_ok=67000000
+[cuckoo] loaded 67000000 positive, 10000000 negative keys (capacity=67000000 bits_per_item=16)
+[cuckoo] filter full/failed after 24 inserts, stopping insert phase
+[cuckoo] done: inserted=24 found_pos=24 measured_fp=0.000000 theoretical_fp=0.000122 deleted_ok=24
+[bloom] loaded 67000000 positive, 10000000 negative keys (size_bits=3305431 k=10)
+[bloom] done: inserted=67000000 found_pos=67000000 false_positives=9547 measured_fp=0.000955 theoretical_fp=0.000977
+cqf      uniform   averaged over 1 run(s)
+cuckoo   uniform   averaged over 1 run(s)
+bloom    uniform   averaged over 1 run(s)
+cqf      zipfian   averaged over 1 run(s)
+cuckoo   zipfian   averaged over 1 run(s)
+bloom    zipfian   averaged over 1 run(s)
+
+Wrote aggregated results to results/extended/paper_scale_report_67m_1024.csv
+Paper-scale output validation passed (6 rows, positive lookups, deletes, and complete insertions where expected).
+Extended plots saved in /amq-benchmark/results/extended
+CSV: results/extended/paper_scale_report_67m_1024.csv
+Raw: results/extended/paper_scale_report_67m_1024_raw.csv
+Configuration: results/extended/paper_scale_report_67m_1024_configuration.txt
+Additional filters target FPR: 0.0009765625
+== Added filters: uniform repeat 1/1 target=1/1024 ==
+[extra] loading shared binary workloads...
+[extra] operations=67000000 negatives=10000000
+[extra] distinct=67000000 fingerprint_bits=10
+[extra] all four added filters passed positive lookup checks
+== Added filters: zipfian repeat 1/1 target=1/1024 ==
+[extra] loading shared binary workloads...
+[extra] operations=67000000 negatives=10000000
+[extra] distinct=229115 fingerprint_bits=10
+[extra] all four added filters passed positive lookup checks
+Aggregated 8 raw rows into 8 rows: results/extended/additional_filters_report_67m_1024.csv
+Merged 6 existing + 8 new filter rows -> results/extended/all_filters_report_67m_1024.csv
+Unified comparison plots written with prefix results/extended/all_filters_report_67m_1024
+PASS: 6 original + 4 added filter families (8 distribution rows)
+PASS: 8 added raw repetitions, 8 aggregated rows
+PASS: positive lookups, explicit operation support/failures, memory, FPR, latency and plots
+ALL UNIFIED FILTER CHECKS PASSED.
+
+== Unified AMQ comparison completed ==
+Base filters : results/extended/paper_scale_report_67m_1024.csv
+Added raw    : results/extended/additional_filters_report_67m_1024_raw.csv
+Added mean   : results/extended/additional_filters_report_67m_1024.csv
+All filters  : results/extended/all_filters_report_67m_1024.csv
+Plots        : results/extended/all_filters_report_67m_1024_*.png

@@ -1,0 +1,105 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=0.75in,top=0.67in,bottom=0.67in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,graphicx,booktabs,array,multirow,amsmath,amssymb}
+\usepackage{xcolor,caption,subcaption,enumitem,placeins,fancyhdr,titlesec,listings}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{hyperref}
+\definecolor{ink}{HTML}{183B4E}
+\definecolor{teal}{HTML}{147D83}
+\definecolor{pale}{HTML}{EFF5F6}
+\hypersetup{colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,pdftitle={Counting, Hashing and Scale: A Comparative Study of Seven Approximate Membership Filters},pdfauthor={CS-301 Project Group, IIT Ropar}}
+\captionsetup{font=small,labelfont=bf,skip=5pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt}
+\clubpenalty=10000
+\widowpenalty=10000
+\setlength{\textfloatsep}{11pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.15}
+\titleformat{\section}{\large\bfseries\color{ink}}{\thesection}{0.65em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.65em}{}
+\titlespacing*{\section}{0pt}{10pt}{5pt}
+\titlespacing*{\subsection}{0pt}{7pt}{3pt}
+\setlist[itemize]{leftmargin=1.35em,itemsep=2pt,topsep=3pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.6em,itemsep=2pt,topsep=3pt,parsep=0pt}
+\lstset{basicstyle=\ttfamily\footnotesize,backgroundcolor=\color{pale},frame=single,rulecolor=\color{pale},breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,xleftmargin=5pt,xrightmargin=5pt,aboveskip=6pt,belowskip=6pt}
+\graphicspath{{figures/}}
+\newcommand{\Mops}{\,M/s}
+\newcommand{\na}{\textemdash}
+\newcommand{\finding}[1]{\par\smallskip\noindent\colorbox{pale}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\small\textbf{What this tells us.} #1}}\par\smallskip}
+\newcommand{\plot}[3]{\begin{figure}[!htbp]\centering\includegraphics[width=#2\linewidth]{#1}\caption{#3}\end{figure}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize Counting, Hashing and Scale}
+\fancyhead[R]{\footnotesize CS-301 $\cdot$ IIT Ropar}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\headheight}{13pt}
+\input{tables/numbers.tex}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{center}
+\vspace*{0.35cm}
+{\fontsize{25}{30}\selectfont\bfseries\color{ink} Counting, Hashing and Scale}\\[0.35cm]
+{\Large\bfseries A Comparative Study of Seven\\[3pt] Approximate Membership Filters}\\[0.65cm]
+{\large\itshape Extending the Earlier Baseline to 67 Million Operations}\\[0.65cm]
+{\large A Research Report Submitted for}\\[0.2cm]
+{\Large\bfseries CS-301: DATABASES}\\[0.18cm]
+{\large Instructor: \textbf{Dr. Manish Kumar}}\\[0.6cm]
+\includegraphics[width=0.30\textwidth]{iit_ropar_logo.png}\\[0.45cm]
+{\large\bfseries DEPARTMENT OF COMPUTER SCIENCE}\\[0.15cm]
+{\large\bfseries INDIAN INSTITUTE OF TECHNOLOGY ROPAR}\\[0.15cm]
+{\large November 2026}
+\vfill
+{\large\bfseries Group Members}\\[0.3cm]
+\begin{tabular}{lll}
+\toprule
+\textbf{Name}&\textbf{Entry No.}&\textbf{Email}\\\midrule
+Allu Ranjith&2023EEB1181&\href{mailto:2023eeb1181@iitrpr.ac.in}{2023eeb1181@iitrpr.ac.in}\\
+Vankadari Bhanu&2023EEB1250&\href{mailto:2023eeb1250@iitrpr.ac.in}{2023eeb1250@iitrpr.ac.in}\\
+Hardik Rangi&2023MCB1203&\href{mailto:2023mcb1203@iitrpr.ac.in}{2023mcb1203@iitrpr.ac.in}\\
+Harshavardhan&2023MCB1216&\href{mailto:2023mcb1216@iitrpr.ac.in}{2023mcb1216@iitrpr.ac.in}\\
+P Rohith&2023MCB1312&\href{mailto:2023mcb1312@iitrpr.ac.in}{2023mcb1312@iitrpr.ac.in}\\
+\bottomrule
+\end{tabular}
+\vfill
+{\small\textbf{Project code:} \href{https://github.com/Harshajevs/Counting-Quotient-Filter-AMQ}{github.com/Harshajevs/Counting-Quotient-Filter-AMQ}}
+\end{center}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+\setcounter{page}{1}
+\input{sections/01_introduction.tex}
+\input{sections/02_background.tex}
+\input{sections/03_methodology.tex}
+\input{sections/04_hashing.tex}
+\input{sections/05_uniform.tex}
+\input{sections/06_skew.tex}
+\input{sections/07_static_accuracy.tex}
+\input{sections/08_hash_results.tex}
+\input{sections/09_scale.tex}
+\input{sections/10_discussion.tex}
+\FloatBarrier
+\clearpage
+\section*{Data and Code Availability}
+The accompanying artifacts provide the measurements and the steps used to turn them into this report. The code package contains the seven implementations, functional tests, experiment runners, raw repetitions, configuration records, workload audits and report-asset generator. The LaTeX package contains editable section files, vector figures, generated tables, the numeric macros used in the prose and a portable copy of the supporting CSVs. The supplied earlier progress report is retained for comparison, while the historical, archived and newly measured result sources remain explicitly distinguished.
+
+The target-sweep table is generated from the first recorded pass at each target. The query-mix table is a separate analytical calculation from measured batch costs; its values are provided in \nolinkurl{data/query_mix_model.csv}. Neither addition represents a new timed experiment. This separation lets a reader check the calculations without confusing them with repeated performance evidence.
+
+Large binary workloads and compiled executables are omitted from the ZIPs. Reproduction scripts regenerate the inputs, and saved manifests, cardinality audits and SHA-256 hashes allow the streams to be compared. The final source manifest identifies the packaged code; the separately named run-start manifest preserves the earlier snapshot. Exact timing and Cuckoo FPR values can vary on a rerun for the reasons described in the methodology. Appendix~\ref{app:repro} maps the files to experiments and gives the execution and regeneration commands.
+
+\begingroup
+\normalsize
+\raggedright
+\setlength{\bibsep}{7pt}
+\setlength{\parskip}{0pt}
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+\endgroup
+\clearpage
+\appendix
+\input{sections/11_appendix.tex}
+\end{document}

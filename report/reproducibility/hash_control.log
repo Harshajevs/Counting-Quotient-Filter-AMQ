@@ -1,0 +1,388 @@
+== Building CQF benchmark ==
+cqf/src/hashutil.c: In function 'MurmurHash64A':
+cqf/src/hashutil.c:49:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   49 |                 case 7: h ^= (uint64_t)data2[6] << 48;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:50:17: note: here
+   50 |                 case 6: h ^= (uint64_t)data2[5] << 40;
+      |                 ^~~~
+cqf/src/hashutil.c:50:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   50 |                 case 6: h ^= (uint64_t)data2[5] << 40;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:51:17: note: here
+   51 |                 case 5: h ^= (uint64_t)data2[4] << 32;
+      |                 ^~~~
+cqf/src/hashutil.c:51:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   51 |                 case 5: h ^= (uint64_t)data2[4] << 32;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:52:17: note: here
+   52 |                 case 4: h ^= (uint64_t)data2[3] << 24;
+      |                 ^~~~
+cqf/src/hashutil.c:52:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   52 |                 case 4: h ^= (uint64_t)data2[3] << 24;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:53:17: note: here
+   53 |                 case 3: h ^= (uint64_t)data2[2] << 16;
+      |                 ^~~~
+cqf/src/hashutil.c:53:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   53 |                 case 3: h ^= (uint64_t)data2[2] << 16;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:54:17: note: here
+   54 |                 case 2: h ^= (uint64_t)data2[1] << 8;
+      |                 ^~~~
+cqf/src/hashutil.c:54:27: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   54 |                 case 2: h ^= (uint64_t)data2[1] << 8;
+      |                         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:55:17: note: here
+   55 |                 case 1: h ^= (uint64_t)data2[0];
+      |                 ^~~~
+cqf/src/hashutil.c: In function 'MurmurHash64B':
+cqf/src/hashutil.c:102:28: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  102 |                 case 3: h2 ^= ((unsigned char*)data)[2] << 16;
+      |                         ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:103:17: note: here
+  103 |                 case 2: h2 ^= ((unsigned char*)data)[1] << 8;
+      |                 ^~~~
+cqf/src/hashutil.c:103:28: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  103 |                 case 2: h2 ^= ((unsigned char*)data)[1] << 8;
+      |                         ~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cqf/src/hashutil.c:104:17: note: here
+  104 |                 case 1: h2 ^= ((unsigned char*)data)[0];
+      |                 ^~~~
+== Building Cuckoo filter benchmark ==
+cuckoo/src/hashutil.cc: In static member function 'static uint32_t cuckoofilter::HashUtil::BobHash(const void*, size_t, uint32_t)':
+cuckoo/src/hashutil.cc:276:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  276 |         c += ((uint32_t)k[11]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:277:7: note: here
+  277 |       case 11:
+      |       ^~~~
+cuckoo/src/hashutil.cc:278:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  278 |         c += ((uint32_t)k[10]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:279:7: note: here
+  279 |       case 10:
+      |       ^~~~
+cuckoo/src/hashutil.cc:280:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  280 |         c += ((uint32_t)k[9]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:281:7: note: here
+  281 |       case 9:
+      |       ^~~~
+cuckoo/src/hashutil.cc:282:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  282 |         c += k[8];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:283:7: note: here
+  283 |       case 8:
+      |       ^~~~
+cuckoo/src/hashutil.cc:284:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  284 |         b += ((uint32_t)k[7]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:285:7: note: here
+  285 |       case 7:
+      |       ^~~~
+cuckoo/src/hashutil.cc:286:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  286 |         b += ((uint32_t)k[6]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:287:7: note: here
+  287 |       case 6:
+      |       ^~~~
+cuckoo/src/hashutil.cc:288:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  288 |         b += ((uint32_t)k[5]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:289:7: note: here
+  289 |       case 5:
+      |       ^~~~
+cuckoo/src/hashutil.cc:290:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  290 |         b += k[4];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:291:7: note: here
+  291 |       case 4:
+      |       ^~~~
+cuckoo/src/hashutil.cc:292:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  292 |         a += ((uint32_t)k[3]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:293:7: note: here
+  293 |       case 3:
+      |       ^~~~
+cuckoo/src/hashutil.cc:294:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  294 |         a += ((uint32_t)k[2]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:295:7: note: here
+  295 |       case 2:
+      |       ^~~~
+cuckoo/src/hashutil.cc:296:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  296 |         a += ((uint32_t)k[1]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:297:7: note: here
+  297 |       case 1:
+      |       ^~~~
+cuckoo/src/hashutil.cc: In static member function 'static void cuckoofilter::HashUtil::BobHash(const void*, size_t, uint32_t*, uint32_t*)':
+cuckoo/src/hashutil.cc:543:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  543 |         c += ((uint32_t)k[11]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:544:7: note: here
+  544 |       case 11:
+      |       ^~~~
+cuckoo/src/hashutil.cc:545:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  545 |         c += ((uint32_t)k[10]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:546:7: note: here
+  546 |       case 10:
+      |       ^~~~
+cuckoo/src/hashutil.cc:547:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  547 |         c += ((uint32_t)k[9]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:548:7: note: here
+  548 |       case 9:
+      |       ^~~~
+cuckoo/src/hashutil.cc:549:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  549 |         c += k[8];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:550:7: note: here
+  550 |       case 8:
+      |       ^~~~
+cuckoo/src/hashutil.cc:551:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  551 |         b += ((uint32_t)k[7]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:552:7: note: here
+  552 |       case 7:
+      |       ^~~~
+cuckoo/src/hashutil.cc:553:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  553 |         b += ((uint32_t)k[6]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:554:7: note: here
+  554 |       case 6:
+      |       ^~~~
+cuckoo/src/hashutil.cc:555:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  555 |         b += ((uint32_t)k[5]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:556:7: note: here
+  556 |       case 5:
+      |       ^~~~
+cuckoo/src/hashutil.cc:557:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  557 |         b += k[4];
+      |         ~~^~~~~~~
+cuckoo/src/hashutil.cc:558:7: note: here
+  558 |       case 4:
+      |       ^~~~
+cuckoo/src/hashutil.cc:559:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  559 |         a += ((uint32_t)k[3]) << 24;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:560:7: note: here
+  560 |       case 3:
+      |       ^~~~
+cuckoo/src/hashutil.cc:561:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  561 |         a += ((uint32_t)k[2]) << 16;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:562:7: note: here
+  562 |       case 2:
+      |       ^~~~
+cuckoo/src/hashutil.cc:563:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  563 |         a += ((uint32_t)k[1]) << 8;
+      |         ~~^~~~~~~~~~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:564:7: note: here
+  564 |       case 1:
+      |       ^~~~
+cuckoo/src/hashutil.cc: In static member function 'static uint32_t cuckoofilter::HashUtil::MurmurHash(const void*, size_t, uint32_t)':
+cuckoo/src/hashutil.cc:625:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  625 |       h ^= data[2] << 16;
+      |       ~~^~~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:626:5: note: here
+  626 |     case 2:
+      |     ^~~~
+cuckoo/src/hashutil.cc:627:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
+  627 |       h ^= data[1] << 8;
+      |       ~~^~~~~~~~~~~~~~~
+cuckoo/src/hashutil.cc:628:5: note: here
+  628 |     case 1:
+      |     ^~~~
+== Building Bloom filter benchmark ==
+== Building additional AMQ filters (Counting Bloom, Blocked Bloom, XOR, Binary Fuse) ==
+== Build complete ==
+  cqf/bench_cqf
+  cuckoo/bench_cuckoo
+  bloom/bench_bloom
+  filters/bench_extra_filters
+Generating 996148 uniform keys in chunks...
+Generating 996148 Zipf keys in chunks (universe=201000000, skew=1.5)...
+Done. Files written to: results/extended/hash_data_report_control
+  uniform distinct ~= 996,148
+  zipf distinct     = 14,061
+PASS uniform: 996,148 operations; 996148 distinct; no negative overlap
+PASS zipfian: 996,148 operations; 14061 distinct; no negative overlap
+CQF hash mode=default workload=uniform repeat=1/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=default)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 1.50 Mops/s
+[cqf] geometry: slots=1048576 occupied=996148 stored_fingerprints=995242 total_count=996148
+[cqf] positive lookup phase complete: 14.27 Mops/s
+[cqf] negative lookup phase complete: 18.67 Mops/s
+[cqf] delete phase complete: 1.06 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=0.0018458 theoretical_fp=0.00185547024 deleted_ok=996148
+CQF hash mode=default workload=uniform repeat=2/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=default)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 1.35 Mops/s
+[cqf] geometry: slots=1048576 occupied=996148 stored_fingerprints=995242 total_count=996148
+[cqf] positive lookup phase complete: 11.52 Mops/s
+[cqf] negative lookup phase complete: 20.78 Mops/s
+[cqf] delete phase complete: 1.38 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=0.0018458 theoretical_fp=0.00185547024 deleted_ok=996148
+CQF hash mode=default workload=uniform repeat=3/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=default)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 1.70 Mops/s
+[cqf] geometry: slots=1048576 occupied=996148 stored_fingerprints=995242 total_count=996148
+[cqf] positive lookup phase complete: 15.73 Mops/s
+[cqf] negative lookup phase complete: 21.46 Mops/s
+[cqf] delete phase complete: 1.15 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=0.0018458 theoretical_fp=0.00185547024 deleted_ok=996148
+CQF hash mode=invertible workload=uniform repeat=1/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=invertible)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 1.76 Mops/s
+[cqf] geometry: slots=1048576 occupied=996148 stored_fingerprints=995207 total_count=996148
+[cqf] positive lookup phase complete: 17.02 Mops/s
+[cqf] negative lookup phase complete: 25.26 Mops/s
+[cqf] delete phase complete: 1.29 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=0.0018633 theoretical_fp=0.00185547024 deleted_ok=996148
+CQF hash mode=invertible workload=uniform repeat=2/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=invertible)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 1.73 Mops/s
+[cqf] geometry: slots=1048576 occupied=996148 stored_fingerprints=995207 total_count=996148
+[cqf] positive lookup phase complete: 17.19 Mops/s
+[cqf] negative lookup phase complete: 25.33 Mops/s
+[cqf] delete phase complete: 1.49 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=0.0018633 theoretical_fp=0.00185547024 deleted_ok=996148
+CQF hash mode=invertible workload=uniform repeat=3/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=invertible)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 1.77 Mops/s
+[cqf] geometry: slots=1048576 occupied=996148 stored_fingerprints=995207 total_count=996148
+[cqf] positive lookup phase complete: 17.14 Mops/s
+[cqf] negative lookup phase complete: 25.81 Mops/s
+[cqf] delete phase complete: 1.50 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=0.0018633 theoretical_fp=0.00185547024 deleted_ok=996148
+CQF hash mode=none workload=uniform repeat=1/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=none)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 1.79 Mops/s
+[cqf] geometry: slots=1048576 occupied=996148 stored_fingerprints=995250 total_count=996148
+[cqf] positive lookup phase complete: 18.65 Mops/s
+[cqf] negative lookup phase complete: 29.00 Mops/s
+[cqf] delete phase complete: 1.48 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=0.0018648 theoretical_fp=0.00185547024 deleted_ok=996148
+CQF hash mode=none workload=uniform repeat=2/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=none)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 1.79 Mops/s
+[cqf] geometry: slots=1048576 occupied=996148 stored_fingerprints=995250 total_count=996148
+[cqf] positive lookup phase complete: 18.72 Mops/s
+[cqf] negative lookup phase complete: 29.32 Mops/s
+[cqf] delete phase complete: 1.51 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=0.0018648 theoretical_fp=0.00185547024 deleted_ok=996148
+CQF hash mode=none workload=uniform repeat=3/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=none)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 1.43 Mops/s
+[cqf] geometry: slots=1048576 occupied=996148 stored_fingerprints=995250 total_count=996148
+[cqf] positive lookup phase complete: 15.21 Mops/s
+[cqf] negative lookup phase complete: 26.74 Mops/s
+[cqf] delete phase complete: 1.43 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=0.0018648 theoretical_fp=0.00185547024 deleted_ok=996148
+CQF hash mode=default workload=zipfian repeat=1/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=default)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 4.35 Mops/s
+[cqf] geometry: slots=1048576 occupied=22073 stored_fingerprints=14061 total_count=996148
+[cqf] positive lookup phase complete: 20.31 Mops/s
+[cqf] negative lookup phase complete: 86.03 Mops/s
+[cqf] delete phase complete: 2.48 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=2.75e-05 theoretical_fp=2.61906534e-05 deleted_ok=996148
+CQF hash mode=default workload=zipfian repeat=2/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=default)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 4.38 Mops/s
+[cqf] geometry: slots=1048576 occupied=22073 stored_fingerprints=14061 total_count=996148
+[cqf] positive lookup phase complete: 20.38 Mops/s
+[cqf] negative lookup phase complete: 88.54 Mops/s
+[cqf] delete phase complete: 2.43 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=2.75e-05 theoretical_fp=2.61906534e-05 deleted_ok=996148
+CQF hash mode=default workload=zipfian repeat=3/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=default)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 3.79 Mops/s
+[cqf] geometry: slots=1048576 occupied=22073 stored_fingerprints=14061 total_count=996148
+[cqf] positive lookup phase complete: 19.24 Mops/s
+[cqf] negative lookup phase complete: 88.82 Mops/s
+[cqf] delete phase complete: 2.29 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=2.75e-05 theoretical_fp=2.61906534e-05 deleted_ok=996148
+CQF hash mode=invertible workload=zipfian repeat=1/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=invertible)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 4.42 Mops/s
+[cqf] geometry: slots=1048576 occupied=22066 stored_fingerprints=14061 total_count=996148
+[cqf] positive lookup phase complete: 31.54 Mops/s
+[cqf] negative lookup phase complete: 116.36 Mops/s
+[cqf] delete phase complete: 2.66 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=3.08e-05 theoretical_fp=2.61906534e-05 deleted_ok=996148
+CQF hash mode=invertible workload=zipfian repeat=2/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=invertible)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 4.33 Mops/s
+[cqf] geometry: slots=1048576 occupied=22066 stored_fingerprints=14061 total_count=996148
+[cqf] positive lookup phase complete: 29.28 Mops/s
+[cqf] negative lookup phase complete: 109.41 Mops/s
+[cqf] delete phase complete: 2.49 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=3.08e-05 theoretical_fp=2.61906534e-05 deleted_ok=996148
+CQF hash mode=invertible workload=zipfian repeat=3/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=invertible)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 4.10 Mops/s
+[cqf] geometry: slots=1048576 occupied=22066 stored_fingerprints=14061 total_count=996148
+[cqf] positive lookup phase complete: 29.42 Mops/s
+[cqf] negative lookup phase complete: 108.86 Mops/s
+[cqf] delete phase complete: 2.18 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=3.08e-05 theoretical_fp=2.61906534e-05 deleted_ok=996148
+CQF hash mode=none workload=zipfian repeat=1/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=none)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 3.31 Mops/s
+[cqf] geometry: slots=1048576 occupied=22068 stored_fingerprints=14061 total_count=996148
+[cqf] positive lookup phase complete: 23.88 Mops/s
+[cqf] negative lookup phase complete: 138.24 Mops/s
+[cqf] delete phase complete: 2.45 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=2.51e-05 theoretical_fp=2.61906534e-05 deleted_ok=996148
+CQF hash mode=none workload=zipfian repeat=2/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=none)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 4.23 Mops/s
+[cqf] geometry: slots=1048576 occupied=22068 stored_fingerprints=14061 total_count=996148
+[cqf] positive lookup phase complete: 31.24 Mops/s
+[cqf] negative lookup phase complete: 158.36 Mops/s
+[cqf] delete phase complete: 2.43 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=2.51e-05 theoretical_fp=2.61906534e-05 deleted_ok=996148
+CQF hash mode=none workload=zipfian repeat=3/3 N=996148
+[cqf] loaded 996148 positive, 10000000 negative keys (qbits=20 rbits=9, mode=none)
+[cqf] table allocation complete (slots=1048576)
+[cqf] insert phase complete: 4.26 Mops/s
+[cqf] geometry: slots=1048576 occupied=22068 stored_fingerprints=14061 total_count=996148
+[cqf] positive lookup phase complete: 30.58 Mops/s
+[cqf] negative lookup phase complete: 147.50 Mops/s
+[cqf] delete phase complete: 2.40 Mops/s
+[cqf] done: inserted=996148 found_pos=996148 measured_fp=2.51e-05 theoretical_fp=2.61906534e-05 deleted_ok=996148
+cqf      uniform   averaged over 3 run(s)
+cqf      uniform   averaged over 3 run(s)
+cqf      uniform   averaged over 3 run(s)
+cqf      zipfian   averaged over 3 run(s)
+cqf      zipfian   averaged over 3 run(s)
+cqf      zipfian   averaged over 3 run(s)
+
+Wrote aggregated results to results/extended/hash_modes_report_control.csv
+Wrote hash-mode plots to /amq-benchmark/results/extended
+Hash-mode insertion/lookup checks passed; deletion mode: full
+CSV: results/extended/hash_modes_report_control.csv
+Raw: results/extended/hash_modes_report_control_raw.csv
+Configuration: results/extended/hash_modes_report_control_configuration.txt
