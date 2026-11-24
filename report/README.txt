@@ -1,5 +1,14 @@
 OVERLEAF PROJECT
 
+Formal cover/style revision — 23 November 2026:
+The cover uses a larger 0.44-textwidth logo and fixed vertical spacing based on
+the supplied previous-report cover. Document and figure headings are bold black;
+Clickable PDF links are dark blue and interpretation paragraphs use plain text. The complete
+report remains exactly 20 pages including the cover and appendices.
+
+To reproduce the formal figure labels from the benchmark repository, run:
+python3 reproducibility/regenerate_formal_assets.py --benchmark-root /path/to/Counting-Quotient-Filter-AMQ
+
 Revised edition: exactly 20 pages including the cover and three appendices.
 The layout keeps related explanations, figures and tables in coherent blocks.
 The expanded query-mix table is an analytical model from existing batch costs;

@@ -5,10 +5,11 @@
 \usepackage{xcolor,caption,subcaption,enumitem,placeins,fancyhdr,titlesec,listings}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage{hyperref}
-\definecolor{ink}{HTML}{183B4E}
-\definecolor{teal}{HTML}{147D83}
-\definecolor{pale}{HTML}{EFF5F6}
-\hypersetup{colorlinks=true,linkcolor=ink,citecolor=teal,urlcolor=teal,pdftitle={Counting, Hashing and Scale: A Comparative Study of Seven Approximate Membership Filters},pdfauthor={CS-301 Project Group, IIT Ropar}}
+\definecolor{ink}{gray}{0}
+\definecolor{teal}{gray}{0}
+\definecolor{pale}{gray}{0.96}
+\colorlet{linkblue}{blue!50!black}
+\hypersetup{colorlinks=true,linkcolor=linkblue,citecolor=linkblue,urlcolor=linkblue,filecolor=linkblue,pdftitle={Counting, Hashing and Scale: A Comparative Study of Seven Approximate Membership Filters},pdfauthor={CS-301 Project Group, IIT Ropar}}
 \captionsetup{font=small,labelfont=bf,skip=5pt}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{4pt plus 1pt}
@@ -28,7 +29,7 @@
 \graphicspath{{figures/}}
 \newcommand{\Mops}{\,M/s}
 \newcommand{\na}{\textemdash}
-\newcommand{\finding}[1]{\par\smallskip\noindent\colorbox{pale}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\small\textbf{What this tells us.} #1}}\par\smallskip}
+\newcommand{\finding}[1]{\par\smallskip\noindent{\small\textbf{What this tells us.} #1}\par\smallskip}
 \newcommand{\plot}[3]{\begin{figure}[!htbp]\centering\includegraphics[width=#2\linewidth]{#1}\caption{#3}\end{figure}}
 \pagestyle{fancy}
 \fancyhf{}
@@ -42,20 +43,25 @@
 \hypersetup{pageanchor=false}
 \begin{titlepage}
 \thispagestyle{empty}
-\begin{center}
-\vspace*{0.35cm}
-{\fontsize{25}{30}\selectfont\bfseries\color{ink} Counting, Hashing and Scale}\\[0.35cm]
-{\Large\bfseries A Comparative Study of Seven\\[3pt] Approximate Membership Filters}\\[0.65cm]
-{\large\itshape Extending the Earlier Baseline to 67 Million Operations}\\[0.65cm]
-{\large A Research Report Submitted for}\\[0.2cm]
-{\Large\bfseries CS-301: DATABASES}\\[0.18cm]
-{\large Instructor: \textbf{Dr. Manish Kumar}}\\[0.6cm]
-\includegraphics[width=0.30\textwidth]{iit_ropar_logo.png}\\[0.45cm]
-{\large\bfseries DEPARTMENT OF COMPUTER SCIENCE}\\[0.15cm]
-{\large\bfseries INDIAN INSTITUTE OF TECHNOLOGY ROPAR}\\[0.15cm]
-{\large November 2026}
-\vfill
-{\large\bfseries Group Members}\\[0.3cm]
+\centering
+\setlength{\parskip}{0pt}
+% Fixed cover spacing keeps the logo, affiliations and authors in one block.
+\vspace*{0.30cm}
+{\fontsize{26}{31}\selectfont\bfseries\color{ink} Counting, Hashing and Scale}\\[0.50cm]
+{\fontsize{16}{20}\selectfont\bfseries A Comparative Study of Seven\\[3pt]
+Approximate Membership Filters}\\[0.60cm]
+{\large\itshape Extending the Earlier Baseline to 67 Million Operations}\\[0.70cm]
+{\Large\itshape A Research Report Submitted}\\[0.25cm]
+{\Large\itshape for the Course}\\[0.50cm]
+{\LARGE\bfseries CS-301: DATABASES}\\[0.25cm]
+{\Large\itshape Instructor:} {\Large\bfseries Dr. Manish Kumar}\\[0.50cm]
+\includegraphics[width=0.44\textwidth]{iit_ropar_logo.png}\\[0.40cm]
+{\Large\bfseries DEPARTMENT OF COMPUTER SCIENCE}\\[0.28cm]
+{\Large\bfseries INDIAN INSTITUTE OF TECHNOLOGY ROPAR}\\[0.28cm]
+{\large\bfseries November 2026}\\[0.45cm]
+{\large\itshape by}\\[0.18cm]
+{\Large\bfseries Group Members}\\[0.30cm]
+{\renewcommand{\arraystretch}{1.30}
 \begin{tabular}{lll}
 \toprule
 \textbf{Name}&\textbf{Entry No.}&\textbf{Email}\\\midrule
@@ -65,10 +71,8 @@ Hardik Rangi&2023MCB1203&\href{mailto:2023mcb1203@iitrpr.ac.in}{2023mcb1203@iitr
 Harshavardhan&2023MCB1216&\href{mailto:2023mcb1216@iitrpr.ac.in}{2023mcb1216@iitrpr.ac.in}\\
 P Rohith&2023MCB1312&\href{mailto:2023mcb1312@iitrpr.ac.in}{2023mcb1312@iitrpr.ac.in}\\
 \bottomrule
-\end{tabular}
-\vfill
-{\small\textbf{Project code:} \href{https://github.com/Harshajevs/Counting-Quotient-Filter-AMQ}{github.com/Harshajevs/Counting-Quotient-Filter-AMQ}}
-\end{center}
+\end{tabular}}\\[0.45cm]
+{\normalsize\textbf{Project Code:} \href{https://github.com/Harshajevs/Counting-Quotient-Filter-AMQ}{github.com/Harshajevs/Counting-Quotient-Filter-AMQ}}
 \end{titlepage}
 \hypersetup{pageanchor=true}
 \setcounter{page}{1}

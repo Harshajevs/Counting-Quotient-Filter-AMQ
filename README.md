@@ -6,6 +6,9 @@ experiments, capacity controls, exact workload auditing, and data-to-LaTeX
 figure/table generation. The final 20-page research paper is available as
 [a compiled PDF](report/main.pdf), with [editable LaTeX sources](report/main.tex)
 and all figures, tables and supporting data under `report/`.
+This is the final formal edition, with the revised cover, bold black headings
+and dark-blue clickable links. See the [report build instructions](report/README.txt)
+for Overleaf compilation and asset regeneration.
 
 The implementations are CQF, Cuckoo, Bloom, Counting Bloom, Blocked Bloom,
 XOR, and a scalar Binary Fuse-style filter. XOR and Fuse-style are immutable
@@ -77,14 +80,15 @@ so its exact FPR can vary even for the same workload.
 
 ## Regenerate report figures and tables
 
-With the LaTeX project extracted to a separate folder:
+To regenerate the checked-in report while preserving its formal figure style:
 
 ```bash
-python3 scripts/make_research_assets.py --out /absolute/path/to/latex-project
+python3 report/reproducibility/regenerate_formal_assets.py --benchmark-root . --out report
 ```
 
 This needs NumPy, pandas and Matplotlib. It creates vector PDF figures, PNG
 previews, numeric macros, LaTeX tables and a portable copy of the evidence.
+For a separate LaTeX project, pass its absolute path to `--out`.
 The provided LaTeX ZIP already contains these assets. Open `main.tex` in
 Overleaf and compile; the ZIP's README contains compiler instructions.
 

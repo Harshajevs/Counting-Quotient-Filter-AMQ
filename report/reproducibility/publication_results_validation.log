@@ -1,0 +1,35 @@
+PASS: results/bench.csv (6 rows)
+PASS: results/bench_raw.csv (18 rows)
+PASS: results/extended/hash_modes.csv (6 rows)
+PASS: results/extended/hash_modes_raw.csv (18 rows)
+PASS: results/extended/hash_modes_67m.csv (6 rows)
+PASS: results/extended/hash_modes_67m_raw.csv (18 rows)
+PASS: results/extended/paper_scale_1_256.csv (6 rows)
+PASS: results/extended/paper_scale_1_256_raw.csv (6 rows)
+PASS: results/extended/paper_scale_1_512.csv (6 rows)
+PASS: results/extended/paper_scale_1_512_raw.csv (18 rows)
+PASS: results/extended/paper_scale_1_1024.csv (6 rows)
+PASS: results/extended/paper_scale_1_1024_raw.csv (6 rows)
+PASS: results/extended/paper_scale_highload_1_512.csv (6 rows)
+PASS: results/extended/paper_scale_highload_1_512_raw.csv (6 rows)
+
+Baseline charts: 9
+Extended charts: 167
+ALL RESULT AND PLOT CHECKS PASSED.
+PASS: 6 original + 4 added filter families (8 distribution rows)
+PASS: 24 added raw repetitions, 8 aggregated rows
+PASS: positive lookups, explicit operation support/failures, memory, FPR, latency and plots
+ALL UNIFIED FILTER CHECKS PASSED.
+PASS: 6 original + 4 added filter families (8 distribution rows)
+PASS: 24 added raw repetitions, 8 aggregated rows
+PASS: positive lookups, explicit operation support/failures, memory, FPR, latency and plots
+ALL UNIFIED FILTER CHECKS PASSED.
+PASS: 6 original + 4 added filter families (8 distribution rows)
+PASS: 8 added raw repetitions, 8 aggregated rows
+PASS: positive lookups, explicit operation support/failures, memory, FPR, latency and plots
+ALL UNIFIED FILTER CHECKS PASSED.
+PASS: 6 original + 4 added filter families (8 distribution rows)
+PASS: 8 added raw repetitions, 8 aggregated rows
+PASS: positive lookups, explicit operation support/failures, memory, FPR, latency and plots
+ALL UNIFIED FILTER CHECKS PASSED.
+PASS: complete compact Zipf run and six complete matched-N geometry rows
